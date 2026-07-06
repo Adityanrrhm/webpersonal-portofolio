@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect, memo } from "react";
+import { useState, useCallback, useEffect, memo } from "react";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -26,19 +26,15 @@ function ProjectCard({
   project,
   cardIndex,
   carouselX,
-  initialOffset,
   onTap,
 }: {
   project: Project;
   cardIndex: number;
   carouselX: ReturnType<typeof useMotionValue<number>>;
-  initialOffset: ReturnType<typeof useMotionValue<number>>;
   onTap: () => void;
 }) {
   const dist = useTransform(() => {
-    const x = carouselX.get();
-    const offset = initialOffset.get();
-    return Math.abs(x - (offset - cardIndex * STEP));
+    return Math.abs(carouselX.get() + cardIndex * STEP);
   });
 
   const cardScale = useTransform(dist, (d) => {
@@ -106,10 +102,7 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [index, setIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
   const carouselX = useMotionValue(0);
-  const initialOffset = useMotionValue(0);
-  const isDragging = useRef(false);
 
   useEffect(() => {
     fetchAPI<{ data: Project[] }>("projects")
@@ -123,22 +116,10 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
   const items = isPreview ? projects.slice(0, 4) : projects;
   const maxIdx = items.length - 1;
 
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const update = () => {
-      initialOffset.set(containerRef.current!.offsetWidth / 2 - CARD_W / 2);
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, [initialOffset]);
-
   const goTo = useCallback(
     (i: number) => {
       const idx = Math.max(0, Math.min(i, maxIdx));
-      const offset = initialOffset.get();
-      const target = offset - idx * STEP;
-      animate(carouselX, target, {
+      animate(carouselX, -idx * STEP, {
         type: "spring",
         stiffness: 300,
         damping: 28,
@@ -146,21 +127,17 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
       });
       setIndex(idx);
     },
-    [maxIdx, initialOffset, carouselX],
+    [maxIdx, carouselX],
   );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragEnd = useCallback(
     (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
-      isDragging.current = false;
       const current = carouselX.get();
-      const offset = initialOffset.get();
-
-      const rawIdx = Math.round((offset - current) / STEP);
+      const rawIdx = Math.round(-current / STEP);
       const clampedIdx = Math.max(0, Math.min(rawIdx, maxIdx));
-      const target = offset - clampedIdx * STEP;
 
-      animate(carouselX, target, {
+      animate(carouselX, -clampedIdx * STEP, {
         type: "spring",
         velocity: info.velocity.x,
         stiffness: 320,
@@ -170,12 +147,12 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
 
       setIndex(clampedIdx);
     },
-    [maxIdx, initialOffset, carouselX],
+    [maxIdx, carouselX],
   );
 
   return (
-    <section id="portfolio" className="section-padding py-20 overflow-hidden">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+    <section id="portfolio" className="py-20 overflow-hidden">
+      <div className="px-6 md:px-12 lg:px-24 max-w-7xl mx-auto flex flex-col md:flex-row md:items-end justify-between mb-12">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -196,7 +173,7 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
           {isPreview && (
             <Link
               href="/projects"
-              className="inline-block border border-gray-200 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors"
+              className="inline-block border border-gray-200 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all active:scale-[0.97] cursor-pointer"
             >
               View All Projects ↗
             </Link>
@@ -205,25 +182,28 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
       </div>
 
       {loading ? (
-        <div className="animate-pulse flex gap-6">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="shrink-0 w-[340px] aspect-[4/5] rounded-[28px] bg-gray-100" />
-          ))}
+        <div className="flex justify-center">
+          <div className="animate-pulse flex gap-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="shrink-0 w-[340px] aspect-[4/5] rounded-[28px] bg-gray-100" />
+            ))}
+          </div>
         </div>
       ) : items.length === 0 ? (
         <p className="text-gray-400 text-center py-20">No projects yet.</p>
       ) : (
         <>
-          <div ref={containerRef} className="relative select-none">
+          <div className="overflow-hidden w-full py-8">
             <motion.div
               className="flex items-center"
               drag="x"
-              style={{ x: carouselX, gap: GAP }}
-              dragElastic={0.08}
-              onDragStart={() => {
-                isDragging.current = true;
-                carouselX.stop();
+              style={{ 
+                x: carouselX, 
+                gap: GAP,
+                paddingLeft: `calc(50% - ${CARD_W / 2}px)`,
+                paddingRight: `calc(50% - ${CARD_W / 2}px)`,
               }}
+              dragElastic={0.08}
               onDragEnd={handleDragEnd}
             >
               {items.map((project, i) => (
@@ -232,7 +212,6 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
                   project={project}
                   cardIndex={i}
                   carouselX={carouselX}
-                  initialOffset={initialOffset}
                   onTap={() => goTo(i)}
                 />
               ))}
@@ -243,7 +222,7 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
             <button
               onClick={() => goTo(index - 1)}
               disabled={index === 0}
-              className="w-11 h-11 rounded-full border border-gray-200 bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-gray-50 hover:scale-105 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-sm"
+              className="w-11 h-11 rounded-full border border-gray-200 bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-sm"
               aria-label="Previous project"
             >
               <ChevronLeft className="w-4 h-4 text-gray-600" />
@@ -254,7 +233,7 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
                 <button
                   key={i}
                   onClick={() => goTo(i)}
-                  className={`rounded-full transition-all duration-500 ease-out ${
+                  className={`rounded-full transition-all duration-500 ease-out active:scale-75 ${
                     i === index ? "bg-gray-800" : "bg-gray-300 hover:bg-gray-400"
                   }`}
                   style={{ width: i === index ? 32 : 10, height: 6 }}
@@ -266,7 +245,7 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
             <button
               onClick={() => goTo(index + 1)}
               disabled={index === maxIdx}
-              className="w-11 h-11 rounded-full border border-gray-200 bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-gray-50 hover:scale-105 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-sm"
+              className="w-11 h-11 rounded-full border border-gray-200 bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-gray-50 hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-sm"
               aria-label="Next project"
             >
               <ChevronRight className="w-4 h-4 text-gray-600" />

@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model certificates {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  title          String    @db.VarChar(255)
+  org            String    @db.VarChar(255)
+  category       String    @db.VarChar(255)
+  issued_date    String    @db.VarChar(255)
+  credential_id  String?   @db.VarChar(255)
+  description    String?   @db.Text
+  image_url      String?   @db.VarChar(255)
+  credential_url String?   @db.VarChar(255)
+  sort_order     Int       @default(0)
+  is_active      Boolean   @default(true)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+}
+
+model contacts {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name       String    @db.VarChar(255)
+  email      String    @db.VarChar(255)
+  subject    String?   @db.VarChar(255)
+  message    String    @db.Text
+  is_read    Boolean   @default(false)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model experiences {
+  id           BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  role         String    @db.VarChar(255)
+  company      String    @db.VarChar(255)
+  type         String    @db.VarChar(255)
+  period_start String    @db.VarChar(255)
+  period_end   String?   @db.VarChar(255)
+  points       Json?
+  sort_order   Int       @default(0)
+  is_active    Boolean   @default(true)
+  created_at   DateTime? @db.Timestamp(0)
+  updated_at   DateTime? @db.Timestamp(0)
+}
+
+model failed_jobs {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  uuid       String   @unique(map: "failed_jobs_uuid_unique") @db.VarChar(255)
+  connection String   @db.Text
+  queue      String   @db.Text
+  payload    String   @db.LongText
+  exception  String   @db.LongText
+  failed_at  DateTime @default(now()) @db.Timestamp(0)
+}
+
+model migrations {
+  id        Int    @id @default(autoincrement()) @db.UnsignedInt
+  migration String @db.VarChar(255)
+  batch     Int
+}
+
+model password_reset_tokens {
+  email      String    @id @db.VarChar(255)
+  token      String    @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+}
+
+model personal_access_tokens {
+  id             BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  tokenable_type String    @db.VarChar(255)
+  tokenable_id   BigInt    @db.UnsignedBigInt
+  name           String    @db.VarChar(255)
+  token          String    @unique(map: "personal_access_tokens_token_unique") @db.VarChar(64)
+  abilities      String?   @db.Text
+  last_used_at   DateTime? @db.Timestamp(0)
+  expires_at     DateTime? @db.Timestamp(0)
+  created_at     DateTime? @db.Timestamp(0)
+  updated_at     DateTime? @db.Timestamp(0)
+
+  @@index([tokenable_type, tokenable_id], map: "personal_access_tokens_tokenable_type_tokenable_id_index")
+}
+
+model profiles {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name       String    @db.VarChar(255)
+  title      String?   @db.VarChar(255)
+  bio        String?   @db.Text
+  photo_url  String?   @db.VarChar(255)
+  cv_url     String?   @db.VarChar(255)
+  email      String?   @db.VarChar(255)
+  location   String?   @db.VarChar(255)
+  focus      String?   @db.VarChar(255)
+  study      String?   @db.VarChar(255)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model projects {
+  id          BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  title       String    @db.VarChar(255)
+  category    String?   @db.VarChar(255)
+  label       String    @db.VarChar(255)
+  description String?   @db.Text
+  tech_stack  Json?
+  image_url   String?   @db.VarChar(255)
+  live_url    String?   @db.VarChar(255)
+  github_url  String?   @db.VarChar(255)
+  sort_order  Int       @default(0)
+  is_active   Boolean   @default(true)
+  created_at  DateTime? @db.Timestamp(0)
+  updated_at  DateTime? @db.Timestamp(0)
+}
+
+model skills {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name       String    @db.VarChar(255)
+  icon_name  String    @db.VarChar(255)
+  color_hex  String?   @db.VarChar(255)
+  category   String?   @db.VarChar(255)
+  sort_order Int       @default(0)
+  is_active  Boolean   @default(true)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model social_links {
+  id         BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  platform   String    @db.VarChar(255)
+  url        String    @db.VarChar(255)
+  icon_name  String?   @db.VarChar(255)
+  sort_order Int       @default(0)
+  is_active  Boolean   @default(true)
+  created_at DateTime? @db.Timestamp(0)
+  updated_at DateTime? @db.Timestamp(0)
+}
+
+model users {
+  id                BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name              String    @db.VarChar(255)
+  email             String    @unique(map: "users_email_unique") @db.VarChar(255)
+  is_admin          Boolean   @default(false)
+  email_verified_at DateTime? @db.Timestamp(0)
+  password          String    @db.VarChar(255)
+  remember_token    String?   @db.VarChar(100)
+  created_at        DateTime? @db.Timestamp(0)
+  updated_at        DateTime? @db.Timestamp(0)
+}

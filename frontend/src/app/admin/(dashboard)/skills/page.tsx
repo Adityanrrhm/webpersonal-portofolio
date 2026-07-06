@@ -76,7 +76,7 @@ export default function AdminSkills() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-heading text-2xl font-bold">Skills</h1>
-        <button onClick={openCreate} className="flex items-center gap-2 bg-zinc-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-zinc-800 transition-colors">
+        <button onClick={openCreate} className="flex items-center gap-2 bg-zinc-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-zinc-800 transition-all active:scale-[0.97]">
           <Plus className="w-4 h-4" /> Add Skill
         </button>
       </div>
@@ -86,7 +86,7 @@ export default function AdminSkills() {
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${
+            className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all active:scale-[0.97] ${
               activeCategory === cat ? "bg-zinc-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
@@ -125,8 +125,8 @@ export default function AdminSkills() {
                 <td className="px-4 py-3"><span className="px-2 py-0.5 rounded-full text-xs bg-gray-100">{s.category}</span></td>
                 <td className="px-4 py-3">
                   <div className="flex gap-2">
-                    <button onClick={() => openEdit(s)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"><Pencil className="w-4 h-4" /></button>
-                    <button onClick={() => setDeleteId(s.id)} className="p-1.5 rounded-lg hover:bg-red-50 text-red-400"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => openEdit(s)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-all active:scale-[0.92]"><Pencil className="w-4 h-4" /></button>
+                    <button onClick={() => setDeleteId(s.id)} className="p-1.5 rounded-lg hover:bg-red-50 text-red-400 transition-all active:scale-[0.92]"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 </td>
               </tr>
@@ -140,7 +140,7 @@ export default function AdminSkills() {
           <form onSubmit={save} className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-heading text-lg font-semibold">{editing.id ? "Edit Skill" : "New Skill"}</h2>
-              <button type="button" onClick={() => setModal(false)} className="text-gray-400 hover:text-gray-600"><X className="w-4 h-4" /></button>
+              <button type="button" onClick={() => setModal(false)} className="text-gray-400 hover:text-gray-600 active:scale-[0.92]"><X className="w-4 h-4" /></button>
             </div>
             <div className="space-y-4">
               <Input label="Name" value={editing.name} onChange={v => setEditing(p => ({ ...p, name: v }))} required />
@@ -151,8 +151,8 @@ export default function AdminSkills() {
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
-              <button type="button" onClick={() => setModal(false)} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50">Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800">Save</button>
+              <button type="button" onClick={() => setModal(false)} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97]">Cancel</button>
+              <button type="submit" className="px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.97]">Save</button>
             </div>
           </form>
         </div>

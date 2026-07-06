@@ -73,7 +73,7 @@ export default function Navbar() {
 
         <a
           href={profile?.cvUrl || "#"}
-          className="bg-accent text-accent-foreground px-5 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 hover:opacity-90 transition-opacity"
+          className="bg-accent text-accent-foreground px-5 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 hover:opacity-90 transition-all active:scale-[0.97] cursor-pointer"
         >
           <Download className="w-4 h-4" />
           Download CV

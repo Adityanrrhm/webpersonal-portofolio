@@ -48,7 +48,7 @@ export function Toast({
           <XCircle className="w-5 h-5 shrink-0 text-red-500" />
         )}
         <span>{toast.message}</span>
-        <button onClick={onDismiss} className="ml-2 opacity-60 hover:opacity-100 transition-opacity">
+        <button onClick={onDismiss} className="ml-2 opacity-60 hover:opacity-100 transition-all active:scale-[0.92]">
           <X className="w-4 h-4" />
         </button>
       </div>

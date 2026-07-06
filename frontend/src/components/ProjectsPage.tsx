@@ -136,7 +136,7 @@ function ProjectModal({
       >
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition-colors shadow-sm"
+          className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition-all active:scale-[0.92] shadow-sm"
         >
           <X className="w-4 h-4 text-gray-500" />
         </button>
@@ -199,7 +199,7 @@ function ProjectModal({
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-opacity"
+                  className="inline-flex items-center gap-2 bg-black text-white px-5 py-2.5 rounded-full text-sm font-medium hover:opacity-90 transition-all active:scale-[0.97] cursor-pointer"
                 >
                   <ExternalLink className="w-4 h-4" />
                   Live Demo
@@ -210,7 +210,7 @@ function ProjectModal({
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-gray-200 text-gray-700 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors"
+                  className="inline-flex items-center gap-2 border border-gray-200 text-gray-700 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all active:scale-[0.97] cursor-pointer"
                 >
                   <GitBranch className="w-4 h-4" />
                   Source Code
@@ -287,7 +287,7 @@ export default function ProjectsPage() {
             <button
               key={label}
               onClick={() => setActiveLabel(label)}
-              className={`relative px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+              className={`relative px-5 py-2 rounded-full text-sm font-medium transition-all active:scale-[0.97] ${
                 isActive
                   ? "bg-black text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"

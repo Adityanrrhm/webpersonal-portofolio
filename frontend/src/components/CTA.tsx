@@ -73,7 +73,7 @@ export default function CTA() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <button
             onClick={handleCopy}
-            className="bg-[#111111] text-white px-8 py-4 rounded-full font-medium flex items-center gap-3 hover:opacity-90 transition-opacity w-full sm:w-auto justify-center"
+            className="bg-[#111111] text-white px-8 py-4 rounded-full font-medium flex items-center gap-3 hover:opacity-90 transition-all active:scale-[0.97] w-full sm:w-auto justify-center"
           >
             {copied ? "Copied!" : email}
             {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
@@ -83,7 +83,7 @@ export default function CTA() {
             href={linkedIn}
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-gray-200 px-8 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-gray-50 transition-colors w-full sm:w-auto justify-center"
+            className="border border-gray-200 px-8 py-4 rounded-full font-medium flex items-center gap-3 hover:bg-gray-50 transition-all active:scale-[0.97] cursor-pointer w-full sm:w-auto justify-center"
           >
             <ExternalLink className="w-4 h-4 text-gray-500" />
             View on LinkedIn

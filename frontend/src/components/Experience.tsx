@@ -49,7 +49,7 @@ export default function Experience({ isPreview = false }: { isPreview?: boolean 
           className="mt-6 md:mt-0"
         >
           {isPreview && (
-            <Link href="/experience" className="inline-block border border-gray-200 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors">
+            <Link href="/experience" className="inline-block border border-gray-200 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all active:scale-[0.97] cursor-pointer">
               View All Experience ↗
             </Link>
           )}

@@ -100,7 +100,7 @@ export default function AdminSocialLinks() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-heading text-2xl font-bold">Social Links</h1>
-        <button onClick={openCreate} className="flex items-center gap-2 bg-zinc-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-zinc-800 transition-colors">
+        <button onClick={openCreate} className="flex items-center gap-2 bg-zinc-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-zinc-800 transition-all active:scale-[0.97]">
           <Plus className="w-4 h-4" /> Add Link
         </button>
       </div>
@@ -133,8 +133,8 @@ export default function AdminSocialLinks() {
                 <td className="px-4 py-3 text-gray-500 font-mono text-xs">{s.iconName}</td>
                 <td className="px-4 py-3">
                   <div className="flex gap-2">
-                    <button onClick={() => openEdit(s)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500"><Pencil className="w-4 h-4" /></button>
-                    <button onClick={() => setDeleteId(s.id)} className="p-1.5 rounded-lg hover:bg-red-50 text-red-400"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => openEdit(s)} className="p-1.5 rounded-lg hover:bg-gray-100 text-gray-500 transition-all active:scale-[0.92]"><Pencil className="w-4 h-4" /></button>
+                    <button onClick={() => setDeleteId(s.id)} className="p-1.5 rounded-lg hover:bg-red-50 text-red-400 transition-all active:scale-[0.92]"><Trash2 className="w-4 h-4" /></button>
                   </div>
                 </td>
               </tr>
@@ -148,7 +148,7 @@ export default function AdminSocialLinks() {
           <form onSubmit={save} className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-heading text-lg font-semibold">{editing.id ? "Edit Social Link" : "New Social Link"}</h2>
-              <button type="button" onClick={() => setModal(false)} className="text-gray-400 hover:text-gray-600"><X className="w-4 h-4" /></button>
+              <button type="button" onClick={() => setModal(false)} className="text-gray-400 hover:text-gray-600 active:scale-[0.92]"><X className="w-4 h-4" /></button>
             </div>
             <div className="space-y-4">
               <Input label="Platform" value={editing.platform} onChange={v => setEditing(p => ({ ...p, platform: v }))} required placeholder="LinkedIn, GitHub, etc" />
@@ -156,8 +156,8 @@ export default function AdminSocialLinks() {
               <Input label="Icon Name" value={editing.iconName} onChange={v => setEditing(p => ({ ...p, iconName: v }))} required placeholder="FaLinkedin, SiGithub, Mail" />
             </div>
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
-              <button type="button" onClick={() => setModal(false)} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50">Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800">Save</button>
+              <button type="button" onClick={() => setModal(false)} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97]">Cancel</button>
+              <button type="submit" className="px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.97]">Save</button>
             </div>
           </form>
         </div>

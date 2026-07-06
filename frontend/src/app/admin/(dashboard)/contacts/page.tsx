@@ -79,7 +79,7 @@ export default function AdminContacts() {
               <button
                 key={f}
                 onClick={() => setFilter(f)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all active:scale-[0.97] ${
                   filter === f ? "bg-zinc-900 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               >
@@ -137,11 +137,11 @@ export default function AdminContacts() {
               </div>
               <div className="flex gap-2">
                 {!selected.isRead && (
-                  <button onClick={() => markRead(selected.id)} className="flex items-center gap-1.5 text-xs text-gray-600 px-3 py-1.5 rounded-lg border hover:bg-gray-50">
+                  <button onClick={() => markRead(selected.id)} className="flex items-center gap-1.5 text-xs text-gray-600 px-3 py-1.5 rounded-lg border hover:bg-gray-50 transition-all active:scale-[0.97]">
                     <Eye className="w-3.5 h-3.5" /> Mark Read
                   </button>
                 )}
-                <button onClick={() => setDeleteId(selected.id)} className="flex items-center gap-1.5 text-xs text-red-500 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-50">
+                <button onClick={() => setDeleteId(selected.id)} className="flex items-center gap-1.5 text-xs text-red-500 px-3 py-1.5 rounded-lg border border-red-200 hover:bg-red-50 transition-all active:scale-[0.97]">
                   <Trash2 className="w-3.5 h-3.5" /> Delete
                 </button>
               </div>

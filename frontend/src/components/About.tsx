@@ -25,15 +25,22 @@ export default function About() {
   }, []);
 
   return (
-    <section id="about" className="section-padding py-20 border-t border-gray-100">
+    <section
+      id="about"
+      className="section-padding py-20 border-t border-gray-100"
+    >
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         className="mb-12"
       >
-        <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">(03) ABOUT ME</p>
-        <h2 className="font-heading text-4xl md:text-5xl font-bold">About me.</h2>
+        <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
+          (03) ABOUT ME
+        </p>
+        <h2 className="font-heading text-4xl md:text-5xl font-bold">
+          About me.
+        </h2>
       </motion.div>
 
       <div className="grid md:grid-cols-12 gap-12 items-center">
@@ -56,8 +63,18 @@ export default function About() {
               ) : (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
-                    <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="m15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.876 0-5.59-.205-8.107-.582Z" />
+                    <svg
+                      className="w-5 h-5 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={1.5}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.876 0-5.59-.205-8.107-.582Z"
+                      />
                     </svg>
                   </div>
                   <p className="text-xs text-gray-400">Add your photo</p>
@@ -74,7 +91,8 @@ export default function About() {
           className="md:col-span-7 space-y-5"
         >
           <p className="text-lg text-gray-600 leading-relaxed">
-            {profile?.bio || "I'm a Computer Science student from Indonesia with a deep interest in Data Analytics and Cloud Computing."}
+            {profile?.bio ||
+              "I'm a Computer Science student from Indonesia with a deep interest in Data Analytics and Cloud Computing."}
           </p>
 
           <div className="w-12 h-px bg-gray-200 my-6" />
@@ -87,8 +105,12 @@ export default function About() {
               { label: "Email", value: profile?.email || "business@adplay.id" },
             ].map((item) => (
               <div key={item.label}>
-                <p className="text-xs text-gray-400 uppercase tracking-wider">{item.label}</p>
-                <p className="text-sm text-gray-800 font-medium mt-0.5">{item.value}</p>
+                <p className="text-xs text-gray-400 uppercase tracking-wider">
+                  {item.label}
+                </p>
+                <p className="text-sm text-gray-800 font-medium mt-0.5">
+                  {item.value}
+                </p>
               </div>
             ))}
           </div>

@@ -223,7 +223,7 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
         {isPreview && (
           <Link
             href="/certificate"
-            className="mt-6 md:mt-0 inline-block border border-gray-200 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors"
+            className="mt-6 md:mt-0 inline-block border border-gray-200 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all active:scale-[0.97] cursor-pointer"
           >
             View All Certificates ↗
           </Link>
@@ -300,7 +300,7 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setZoomed(!zoomed)}
-                    className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50"
+                    className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-all active:scale-[0.97] px-3 py-2 rounded-lg hover:bg-gray-50"
                   >
                     <ZoomIn className="w-3.5 h-3.5" />
                     {zoomed ? "Reset" : "Zoom"}
@@ -309,7 +309,7 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
                     href={modalCert.credentialUrl || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors px-3 py-2 rounded-lg hover:bg-gray-50"
+                    className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-all active:scale-[0.97] cursor-pointer px-3 py-2 rounded-lg hover:bg-gray-50"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
                     View
@@ -322,7 +322,7 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
                   setModalCert(null);
                   setZoomed(false);
                 }}
-                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition-colors shadow-sm"
+                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 border border-gray-200 flex items-center justify-center hover:bg-gray-100 transition-all active:scale-[0.92] shadow-sm"
               >
                 <X className="w-4 h-4 text-gray-500" />
               </button>

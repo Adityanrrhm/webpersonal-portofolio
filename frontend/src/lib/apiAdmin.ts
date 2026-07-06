@@ -37,20 +37,3 @@ export async function apiAdmin<T>(endpoint: string, options?: RequestInit): Prom
 
   return res.json();
 }
-
-export async function uploadImage(file: File): Promise<string> {
-  const token = getToken();
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const res = await fetch("/api/admin/media/upload", {
-    method: "POST",
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
-    body: formData,
-  });
-
-  if (!res.ok) throw new Error("Upload failed");
-
-  const json = await res.json();
-  return json.data.url;
-}

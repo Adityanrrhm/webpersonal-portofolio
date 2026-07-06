@@ -1,0 +1,5 @@
+backend_laravel/
+.env
+.env.local
+*.log
+.DS_Store
