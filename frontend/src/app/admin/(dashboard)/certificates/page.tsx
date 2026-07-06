@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, type FormEvent } from "react";
-import { apiAdmin } from "@/lib/apiAdmin";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
+import { apiAdmin, getToken } from "@/lib/apiAdmin";
+import { uploadFiles } from "@/lib/uploadthing";
+import { Plus, Pencil, Trash2, X, Loader2 } from "lucide-react";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
 import ImageUpload from "@/components/admin/ImageUpload";
 import { useToast, Toast } from "@/components/admin/Toast";
@@ -15,7 +16,7 @@ interface Certificate {
   issuedDate: string;
   credentialId: string | null;
   description: string | null;
-  imageUrl: string | null;
+  imageUrl: string | File | null;
   credentialUrl: string | null;
 }
 
@@ -26,20 +27,36 @@ export default function AdminCertificates() {
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [editing, setEditing] = useState<Certificate>(empty);
+  const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { toast, showToast, dismissToast } = useToast();
 
   useEffect(() => { fetch(); }, []);
   const fetch = () => apiAdmin<{ data: Certificate[] }>("admin/certificates").then(r => { setItems(r.data); setLoading(false); });
 
-  const openCreate = () => { setEditing({ ...empty, issuedDate: new Date().toISOString().split("T")[0] }); setModal(true); };
-  const openEdit = (c: Certificate) => { setEditing(c); setModal(true); };
+  const openCreate = () => { setEditing({ ...empty, issuedDate: new Date().toISOString().split("T")[0] }); setOriginalImageUrl(null); setModal(true); };
+  const openEdit = (c: Certificate) => { setEditing(c); setOriginalImageUrl(typeof c.imageUrl === "string" ? c.imageUrl : null); setModal(true); };
 
   const save = async (e: FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
+
+    let finalImageUrl = typeof editing.imageUrl === "string" ? editing.imageUrl : null;
+
     try {
+      if (editing.imageUrl instanceof File) {
+        const token = getToken();
+        const res = await uploadFiles("imageUploader", {
+          files: [editing.imageUrl],
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (res?.[0]) finalImageUrl = res[0].ufsUrl ?? res[0].url;
+      }
+
       const body = {
         title: editing.title,
         org: editing.org,
@@ -47,7 +64,7 @@ export default function AdminCertificates() {
         issued_date: editing.issuedDate,
         credential_id: editing.credentialId || null,
         description: editing.description || null,
-        image_url: editing.imageUrl || null,
+        image_url: finalImageUrl,
         credential_url: editing.credentialUrl || null,
       };
       if (editing.id) {
@@ -57,15 +74,27 @@ export default function AdminCertificates() {
         await apiAdmin("admin/certificates", { method: "POST", body: JSON.stringify(body) });
         showToast("Certificate created!", "success");
       }
+
+      // Hapus gambar lama jika ada dan berubah
+      if (originalImageUrl && originalImageUrl !== finalImageUrl) {
+        await apiAdmin("uploadthing/delete", {
+          method: "POST",
+          body: JSON.stringify({ url: originalImageUrl }),
+        }).catch(err => console.error("Failed to delete old image:", err));
+      }
+
       setModal(false);
       fetch();
     } catch {
       showToast("Failed to save certificate", "error");
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const confirmDelete = async () => {
     if (!deleteId) return;
+    setIsDeleting(true);
     try {
       await apiAdmin(`admin/certificates/${deleteId}`, { method: "DELETE" });
       showToast("Certificate deleted!", "success");
@@ -73,6 +102,8 @@ export default function AdminCertificates() {
       fetch();
     } catch {
       showToast("Failed to delete certificate", "error");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -143,8 +174,8 @@ export default function AdminCertificates() {
             {searched.map((c) => (
               <tr key={c.id} className="border-b last:border-0 hover:bg-gray-50">
                 <td className="px-4 py-3">
-                  {c.imageUrl
-                    ? <img src={c.imageUrl} alt="" className="w-10 h-10 rounded-lg object-cover border" />
+                  {editing.imageUrl && typeof editing.imageUrl === "string" || (c.imageUrl && typeof c.imageUrl === "string")
+                    ? <img src={typeof c.imageUrl === "string" ? c.imageUrl : ""} alt="" className="w-10 h-10 rounded-lg object-cover border" />
                     : <div className="w-10 h-10 rounded-lg bg-gray-100 border" />
                   }
                 </td>
@@ -190,14 +221,17 @@ export default function AdminCertificates() {
               <Input label="Credential URL" type="text" value={editing.credentialUrl || ""} onChange={v => setEditing(p => ({ ...p, credentialUrl: v }))} />
             </div>
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
-              <button type="button" onClick={() => setModal(false)} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97]">Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.97]">Save</button>
+              <button type="button" onClick={() => setModal(false)} disabled={isSaving} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97] disabled:opacity-50">Cancel</button>
+              <button type="submit" disabled={isSaving} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.97] disabled:opacity-70">
+                {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isSaving ? "Saving..." : "Save"}
+              </button>
             </div>
           </form>
         </div>
       )}
 
-      <ConfirmDialog open={deleteId !== null} title="Delete Certificate" message="Are you sure you want to delete this certificate?" onConfirm={confirmDelete} onCancel={() => setDeleteId(null)} />
+      <ConfirmDialog open={deleteId !== null} loading={isDeleting} title="Delete Certificate" message="Are you sure you want to delete this certificate?" onConfirm={confirmDelete} onCancel={() => setDeleteId(null)} />
       <Toast toast={toast} onDismiss={dismissToast} />
     </div>
   );

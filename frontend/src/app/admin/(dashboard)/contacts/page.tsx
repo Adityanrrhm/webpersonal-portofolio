@@ -21,6 +21,7 @@ export default function AdminContacts() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Contact | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const { toast, showToast, dismissToast } = useToast();
@@ -41,6 +42,7 @@ export default function AdminContacts() {
 
   const confirmDelete = async () => {
     if (!deleteId) return;
+    setIsDeleting(true);
     try {
       await apiAdmin(`admin/contacts/${deleteId}`, { method: "DELETE" });
       setItems(prev => prev.filter(c => c.id !== deleteId));
@@ -49,6 +51,8 @@ export default function AdminContacts() {
       showToast("Message deleted!", "success");
     } catch {
       showToast("Failed to delete message", "error");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -164,7 +168,7 @@ export default function AdminContacts() {
         )}
       </div>
 
-      <ConfirmDialog open={deleteId !== null} title="Delete Message" message="Are you sure you want to delete this message?" onConfirm={confirmDelete} onCancel={() => setDeleteId(null)} />
+      <ConfirmDialog open={deleteId !== null} loading={isDeleting} title="Delete Message" message="Are you sure you want to delete this message?" onConfirm={confirmDelete} onCancel={() => setDeleteId(null)} />
       <Toast toast={toast} onDismiss={dismissToast} />
     </div>
   );

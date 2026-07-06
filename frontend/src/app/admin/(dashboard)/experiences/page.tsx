@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type FormEvent } from "react";
 import { apiAdmin } from "@/lib/apiAdmin";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
+import { Plus, Pencil, Trash2, X, Loader2 } from "lucide-react";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
 import { useToast, Toast } from "@/components/admin/Toast";
 
@@ -26,6 +26,8 @@ export default function AdminExperiences() {
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [activeType, setActiveType] = useState("All");
   const [search, setSearch] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { toast, showToast, dismissToast } = useToast();
 
   useEffect(() => { fetch(); }, []);
@@ -36,6 +38,7 @@ export default function AdminExperiences() {
 
   const save = async (e: FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
     const body = {
       role: editing.role,
       company: editing.company,
@@ -56,11 +59,14 @@ export default function AdminExperiences() {
       fetch();
     } catch {
       showToast("Failed to save experience", "error");
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const confirmDelete = async () => {
     if (!deleteId) return;
+    setIsDeleting(true);
     try {
       await apiAdmin(`admin/experiences/${deleteId}`, { method: "DELETE" });
       showToast("Experience deleted!", "success");
@@ -68,6 +74,8 @@ export default function AdminExperiences() {
       fetch();
     } catch {
       showToast("Failed to delete experience", "error");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -197,14 +205,17 @@ export default function AdminExperiences() {
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
-              <button type="button" onClick={() => setModal(false)} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97]">Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.97]">Save</button>
+              <button type="button" onClick={() => setModal(false)} disabled={isSaving} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97] disabled:opacity-50">Cancel</button>
+              <button type="submit" disabled={isSaving} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.97] disabled:opacity-70">
+                {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isSaving ? "Saving..." : "Save"}
+              </button>
             </div>
           </form>
         </div>
       )}
 
-      <ConfirmDialog open={deleteId !== null} title="Delete Experience" message="Are you sure you want to delete this experience?" onConfirm={confirmDelete} onCancel={() => setDeleteId(null)} />
+      <ConfirmDialog open={deleteId !== null} loading={isDeleting} title="Delete Experience" message="Are you sure you want to delete this experience?" onConfirm={confirmDelete} onCancel={() => setDeleteId(null)} />
       <Toast toast={toast} onDismiss={dismissToast} />
     </div>
   );

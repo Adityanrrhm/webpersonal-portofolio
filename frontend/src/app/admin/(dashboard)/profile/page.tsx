@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useEffect, type FormEvent } from "react";
-import { apiAdmin } from "@/lib/apiAdmin";
+import { apiAdmin, getToken } from "@/lib/apiAdmin";
+import { uploadFiles } from "@/lib/uploadthing";
 import ImageUpload from "@/components/admin/ImageUpload";
-import { Save } from "lucide-react";
+import { Save, Loader2 } from "lucide-react";
 import { useToast, Toast } from "@/components/admin/Toast";
 
 interface Profile {
   name: string;
   title: string;
   bio: string;
-  photoUrl: string | null;
+  photoUrl: string | File | null;
   cvUrl: string | null;
   email: string;
   location: string;
@@ -22,11 +23,15 @@ export default function AdminProfile() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [originalPhotoUrl, setOriginalPhotoUrl] = useState<string | null>(null);
   const { toast, showToast, dismissToast } = useToast();
 
   useEffect(() => {
     apiAdmin<{ data: Profile }>("profile")
-      .then((res) => setProfile(res.data))
+      .then((res) => {
+        setProfile(res.data);
+        setOriginalPhotoUrl(typeof res.data.photoUrl === "string" ? res.data.photoUrl : null);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
@@ -35,11 +40,35 @@ export default function AdminProfile() {
     e.preventDefault();
     if (!profile) return;
     setSaving(true);
+    
+    let finalPhotoUrl = typeof profile.photoUrl === "string" ? profile.photoUrl : null;
+
     try {
+      if (profile.photoUrl instanceof File) {
+        const token = getToken();
+        const res = await uploadFiles("imageUploader", {
+          files: [profile.photoUrl],
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (res?.[0]) finalPhotoUrl = res[0].ufsUrl ?? res[0].url;
+      }
+
+      const body = { ...profile, photoUrl: finalPhotoUrl };
+
       await apiAdmin("admin/profile", {
         method: "PUT",
-        body: JSON.stringify(profile),
+        body: JSON.stringify(body),
       });
+
+      // Hapus gambar lama jika ada dan berubah
+      if (originalPhotoUrl && originalPhotoUrl !== finalPhotoUrl) {
+        await apiAdmin("uploadthing/delete", {
+          method: "POST",
+          body: JSON.stringify({ url: originalPhotoUrl }),
+        }).catch(err => console.error("Failed to delete old image:", err));
+        setOriginalPhotoUrl(finalPhotoUrl); // Update original to new saved one
+      }
+
       showToast("Profile updated!", "success");
     } catch {
       showToast("Failed to update profile", "error");
@@ -51,7 +80,7 @@ export default function AdminProfile() {
   if (loading) return <div className="animate-pulse space-y-6">{Array(6).fill(0).map((_, i) => <div key={i} className="h-12 bg-gray-200 rounded-lg" />)}</div>;
   if (!profile) return <p className="text-gray-400">Profile not found.</p>;
 
-  const update = (key: keyof Profile, value: string) => setProfile(p => p ? { ...p, [key]: value } : p);
+  const update = (key: keyof Profile, value: any) => setProfile(p => p ? { ...p, [key]: value } : p);
 
   return (
     <div>
@@ -89,8 +118,8 @@ export default function AdminProfile() {
         <Input label="CV URL" type="text" value={profile.cvUrl || ""} onChange={v => update("cvUrl", v)} placeholder="Link to downloadable CV/resume" />
 
         <div className="pt-4 border-t">
-          <button type="submit" disabled={saving} className="flex items-center gap-2 bg-zinc-900 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-800 transition-all active:scale-[0.97] disabled:opacity-50">
-            <Save className="w-4 h-4" />
+          <button type="submit" disabled={saving} className="flex items-center gap-2 bg-zinc-900 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-800 transition-all active:scale-[0.97] disabled:opacity-70">
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {saving ? "Saving..." : "Save Profile"}
           </button>
         </div>

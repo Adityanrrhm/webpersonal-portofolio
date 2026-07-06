@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect, type FormEvent } from "react";
-import { apiAdmin } from "@/lib/apiAdmin";
-import { Plus, Pencil, Trash2, X } from "lucide-react";
+import { apiAdmin, getToken } from "@/lib/apiAdmin";
+import { uploadFiles } from "@/lib/uploadthing";
+import { Plus, Pencil, Trash2, X, Loader2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
 import ImageUpload from "@/components/admin/ImageUpload";
@@ -15,7 +16,7 @@ interface Project {
   label: string;
   description: string | null;
   techStack: string[];
-  imageUrl: string | null;
+  imageUrl: string | File | null;
   liveUrl: string | null;
   githubUrl: string | null;
 }
@@ -27,27 +28,43 @@ export default function AdminProjects() {
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [editing, setEditing] = useState<Project>(empty);
+  const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [activeLabel, setActiveLabel] = useState("All");
   const [search, setSearch] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { toast, showToast, dismissToast } = useToast();
 
   useEffect(() => { fetch(); }, []);
   const fetch = () => apiAdmin<{ data: Project[] }>("admin/projects").then(r => { setProjects(r.data); setLoading(false); });
 
-  const openCreate = () => { setEditing(empty); setModal(true); };
-  const openEdit = (p: Project) => { setEditing(p); setModal(true); };
+  const openCreate = () => { setEditing(empty); setOriginalImageUrl(null); setModal(true); };
+  const openEdit = (p: Project) => { setEditing(p); setOriginalImageUrl(typeof p.imageUrl === "string" ? p.imageUrl : null); setModal(true); };
 
   const save = async (e: FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
+    
+    let finalImageUrl = typeof editing.imageUrl === "string" ? editing.imageUrl : null;
+
     try {
+      if (editing.imageUrl instanceof File) {
+        const token = getToken();
+        const res = await uploadFiles("imageUploader", {
+          files: [editing.imageUrl],
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (res?.[0]) finalImageUrl = res[0].ufsUrl ?? res[0].url;
+      }
+
       const body = {
         title: editing.title,
         category: editing.category,
         label: editing.label,
         description: editing.description || null,
         tech_stack: editing.techStack,
-        image_url: editing.imageUrl || null,
+        image_url: finalImageUrl,
         live_url: editing.liveUrl || null,
         github_url: editing.githubUrl || null,
       };
@@ -56,16 +73,28 @@ export default function AdminProjects() {
       } else {
         await apiAdmin("admin/projects", { method: "POST", body: JSON.stringify(body) });
       }
+
+      // Hapus gambar lama jika ada dan berubah
+      if (originalImageUrl && originalImageUrl !== finalImageUrl) {
+        await apiAdmin("uploadthing/delete", {
+          method: "POST",
+          body: JSON.stringify({ url: originalImageUrl }),
+        }).catch(err => console.error("Failed to delete old image:", err));
+      }
+
       setModal(false);
       showToast(editing.id ? "Project updated!" : "Project created!", "success");
       fetch();
     } catch {
       showToast("Failed to save project", "error");
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const confirmDelete = async () => {
     if (!deleteId) return;
+    setIsDeleting(true);
     try {
       await apiAdmin(`admin/projects/${deleteId}`, { method: "DELETE" });
       setDeleteId(null);
@@ -73,6 +102,8 @@ export default function AdminProjects() {
       fetch();
     } catch {
       showToast("Failed to delete project", "error");
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -177,7 +208,7 @@ export default function AdminProjects() {
                   className="border-b last:border-0 hover:bg-gray-50"
                 >
                   <td className="px-4 py-3">
-                    {p.imageUrl ? (
+                    {p.imageUrl && typeof p.imageUrl === "string" ? (
                       <img src={p.imageUrl} alt="" className="w-10 h-10 rounded-lg object-cover border" />
                     ) : (
                       <div className="w-10 h-10 rounded-lg bg-gray-100 border" />
@@ -228,14 +259,17 @@ export default function AdminProjects() {
               <Input label="GitHub URL" type="text" value={editing.githubUrl || ""} onChange={v => setEditing(p => ({ ...p, githubUrl: v }))} />
             </div>
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
-              <button type="button" onClick={() => setModal(false)} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97]">Cancel</button>
-              <button type="submit" className="px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.97]">Save</button>
+              <button type="button" onClick={() => setModal(false)} disabled={isSaving} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97] disabled:opacity-50">Cancel</button>
+              <button type="submit" disabled={isSaving} className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm bg-zinc-900 text-white hover:bg-zinc-800 transition-all active:scale-[0.97] disabled:opacity-70">
+                {isSaving && <Loader2 className="w-4 h-4 animate-spin" />}
+                {isSaving ? "Saving..." : "Save"}
+              </button>
             </div>
           </form>
         </div>
       )}
 
-      <ConfirmDialog open={deleteId !== null} title="Delete Project" message="Are you sure you want to delete this project?" onConfirm={confirmDelete} onCancel={() => setDeleteId(null)} />
+      <ConfirmDialog open={deleteId !== null} loading={isDeleting} title="Delete Project" message="Are you sure you want to delete this project?" onConfirm={confirmDelete} onCancel={() => setDeleteId(null)} />
       <Toast toast={toast} onDismiss={dismissToast} />
     </div>
   );

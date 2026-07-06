@@ -34,22 +34,22 @@ export function Toast({
   if (!toast.show) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] animate-in slide-in-from-right-2 fade-in duration-200">
+    <div className="fixed top-8 right-8 z-[100] animate-in slide-in-from-top-4 slide-in-from-right-4 fade-in duration-300">
       <div
-        className={`flex items-center gap-3 px-5 py-3.5 rounded-xl shadow-lg border backdrop-blur-sm text-sm font-medium ${
+        className={`flex items-center gap-4 px-6 py-4 rounded-2xl shadow-xl border backdrop-blur-sm text-base font-semibold ${
           toast.type === "success"
             ? "bg-emerald-50 border-emerald-200 text-emerald-800"
             : "bg-red-50 border-red-200 text-red-800"
         }`}
       >
         {toast.type === "success" ? (
-          <CheckCircle className="w-5 h-5 shrink-0 text-emerald-500" />
+          <CheckCircle className="w-6 h-6 shrink-0 text-emerald-500" />
         ) : (
-          <XCircle className="w-5 h-5 shrink-0 text-red-500" />
+          <XCircle className="w-6 h-6 shrink-0 text-red-500" />
         )}
-        <span>{toast.message}</span>
-        <button onClick={onDismiss} className="ml-2 opacity-60 hover:opacity-100 transition-all active:scale-[0.92]">
-          <X className="w-4 h-4" />
+        <span className="pr-4">{toast.message}</span>
+        <button onClick={onDismiss} className="ml-auto opacity-60 hover:opacity-100 transition-all active:scale-[0.92] bg-white/50 rounded-full p-1">
+          <X className="w-5 h-5" />
         </button>
       </div>
     </div>
