@@ -6,16 +6,12 @@ const url = new URL(process.env.DATABASE_URL!);
 const adapter = new PrismaMariaDb({
   host: url.hostname,
   port: Number(url.port),
-  user: url.username,
-  password: url.password,
+  user: decodeURIComponent(url.username),
+  password: decodeURIComponent(url.password),
   database: url.pathname.replace(/^\//, ""),
-  ssl:
-    process.env.NODE_ENV !== "production"
-      ? true
-      : { rejectUnauthorized: false },
+  ssl: { rejectUnauthorized: false },
+  connectTimeout: 10000,
 });
-
-console.table(adapter);
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
