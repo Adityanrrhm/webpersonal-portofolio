@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const prisma = getPrisma();
   const user = await verifyAuth(request);
   if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
@@ -47,6 +48,7 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const prisma = getPrisma();
   const user = await verifyAuth(request);
   if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 

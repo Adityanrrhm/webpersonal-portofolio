@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 export async function GET(request: NextRequest) {
+  const prisma = getPrisma();
   try {
     const experiences = await prisma.experiences.findMany({
       where: { is_active: true },

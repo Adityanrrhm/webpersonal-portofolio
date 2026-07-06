@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { NextRequest } from "next/server";
-import { prisma } from "./prisma";
+import { getPrisma } from "./prisma";
 
 const SECRET = process.env.JWT_SECRET || "fallback-secret-change-me";
 
@@ -30,6 +30,7 @@ export function verifyToken(token: string): JwtPayload | null {
 }
 
 export async function verifyAuth(request: NextRequest) {
+  const prisma = getPrisma();
   const header = request.headers.get("Authorization");
   if (!header?.startsWith("Bearer ")) return null;
 
