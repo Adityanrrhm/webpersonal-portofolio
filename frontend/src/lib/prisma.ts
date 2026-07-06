@@ -9,8 +9,13 @@ const adapter = new PrismaMariaDb({
   user: url.username,
   password: url.password,
   database: url.pathname.replace(/^\//, ""),
-  ssl: true,
+  ssl:
+    process.env.NODE_ENV !== "production"
+      ? true
+      : { rejectUnauthorized: false },
 });
+
+console.table(adapter);
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 
