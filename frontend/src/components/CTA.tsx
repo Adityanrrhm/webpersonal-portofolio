@@ -51,7 +51,7 @@ export default function CTA() {
   return (
     <section
       id="contact"
-      className="section-padding py-32 flex flex-col items-center justify-center text-center"
+      className="section-padding py-20 md:py-32 flex flex-col items-center justify-center text-center"
     >
       <motion.div
         initial={{ opacity: 0, y: 30 }}
@@ -59,13 +59,13 @@ export default function CTA() {
         viewport={{ once: true }}
         className="max-w-4xl"
       >
-        <h2 className="font-heading text-5xl md:text-7xl font-bold tracking-tight mb-6">
+        <h2 className="font-heading text-4xl sm:text-5xl md:text-7xl font-bold tracking-tight mb-6">
           Let's <span className="text-gray-400">build something</span>
-          <br className="hidden md:block" />
+          <br className="hidden sm:block" />
           meaningful
         </h2>
 
-        <p className="text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
+        <p className="text-base sm:text-lg text-gray-500 mb-8 md:mb-12 max-w-2xl mx-auto">
           For partnerships, campaigns, creator collaborations, or market-entry
           storytelling aimed at Indonesian audiences, reach out directly.
         </p>
