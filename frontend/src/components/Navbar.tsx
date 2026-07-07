@@ -52,21 +52,38 @@ export default function Navbar() {
             : "mx-6 w-full max-w-5xl rounded-full border px-6 py-3"
         }`}
       >
-        <Link href="/" className="font-bold text-lg tracking-tight">
-          {profile?.name || "Aditya Nur Rohim"}
+        <Link href="/" className="flex items-center gap-2 font-bold text-lg tracking-tight group">
+          <img 
+            src="/assets/logo_web_Adityanrrhm.png" 
+            alt="Logo" 
+            className="h-6 w-auto object-contain transition-transform group-hover:scale-105" 
+          />
+          <span className="text-gray-900">{profile?.name || "Aditya Nur Rohim"}</span>
         </Link>
 
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-muted">
-          <Link href="/projects" className="hover:text-foreground transition-colors">
+          <Link
+            href="/projects"
+            className="hover:text-foreground transition-colors"
+          >
             Projects
           </Link>
-          <Link href="/certificate" className="hover:text-foreground transition-colors">
+          <Link
+            href="/certificate"
+            className="hover:text-foreground transition-colors"
+          >
             Certificate
           </Link>
-          <Link href="/experience" className="hover:text-foreground transition-colors">
+          <Link
+            href="/experience"
+            className="hover:text-foreground transition-colors"
+          >
             Experience
           </Link>
-          <Link href="/#about" className="hover:text-foreground transition-colors">
+          <Link
+            href="/#about"
+            className="hover:text-foreground transition-colors"
+          >
             About
           </Link>
         </div>

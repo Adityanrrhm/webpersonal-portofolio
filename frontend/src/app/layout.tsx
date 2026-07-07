@@ -20,6 +20,9 @@ const caveat = Caveat({
 export const metadata: Metadata = {
   title: "Aditya Nur Rohim - Portfolio",
   description: "Personal portfolio and work history",
+  icons: {
+    icon: "/assets/logo_web_Adityanrrhm.png",
+  },
 };
 
 export default function RootLayout({

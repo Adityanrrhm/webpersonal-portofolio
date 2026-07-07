@@ -57,8 +57,17 @@ export default function Footer() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="mx-auto w-[87%] max-w-[1400px] bg-white rounded-[32px] border border-gray-200 shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-6 md:px-12 pt-10 md:pt-12 pb-7"
+        className="relative mx-auto w-[87%] max-w-[1400px] bg-white rounded-[32px] border border-gray-200 shadow-[0_10px_40px_rgba(0,0,0,0.04)] px-6 md:px-12 pt-14 md:pt-16 pb-7"
       >
+        {/* Logo Badge di atas kiri wadah footer (overlapping border) */}
+        <div className="absolute -top-6 left-6 md:left-5 flex items-center justify-center w-14 h-14 rounded-2xl bg-white border border-gray-200 shadow-md p-2.5 z-10">
+          <img
+            src="/assets/logo_web_Adityanrrhm.png"
+            alt="Logo Badge"
+            className="w-full h-full object-contain"
+          />
+        </div>
+
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12 lg:gap-0">
           <div className="w-full lg:w-[45%]">
             <div className="flex items-center gap-3">
@@ -68,7 +77,8 @@ export default function Footer() {
             </div>
 
             <p className="text-md text-gray-500 leading-relaxed mt-6 max-w-[380px]">
-              {profile?.bio || "A Computer Science student passionate about Data Analytics and Cloud Computing, transforming data into actionable insights through modern cloud-based solutions."}
+              {profile?.bio ||
+                "A Computer Science student passionate about Data Analytics and Cloud Computing, transforming data into actionable insights through modern cloud-based solutions."}
             </p>
           </div>
 
@@ -105,16 +115,20 @@ export default function Footer() {
               ))}
 
               <div>
-                <h4 className="text-base font-semibold text-gray-900">Connect</h4>
+                <h4 className="text-base font-semibold text-gray-900">
+                  Connect
+                </h4>
                 <ul className="mt-[18px] space-y-[14px]">
                   {socialLinks.map((link) => {
                     const isExternal =
-                      link.url.startsWith("http") || link.url.startsWith("mailto");
+                      link.url.startsWith("http") ||
+                      link.url.startsWith("mailto");
                     const Tag = isExternal ? "a" : Link;
                     const extraProps = isExternal
                       ? { target: "_blank", rel: "noopener noreferrer" }
                       : {};
-                    const Icon = link.iconName === "Mail" ? Mail : getIcon(link.iconName);
+                    const Icon =
+                      link.iconName === "Mail" ? Mail : getIcon(link.iconName);
                     return (
                       <li key={link.id}>
                         <Tag
@@ -138,7 +152,8 @@ export default function Footer() {
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-[13px] text-gray-400">
-            &copy; 2026 {profile?.name || "Aditya Nur Rohim"}. All rights reserved.
+            &copy; 2026 {profile?.name || "Aditya Nur Rohim"}. All rights
+            reserved.
           </p>
           <div className="flex items-center gap-6">
             {bottomLinks.map((link) => (
