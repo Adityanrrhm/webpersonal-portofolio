@@ -75,13 +75,12 @@ export default function AdminExperiences() {
 
     try {
       const token = getToken();
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       // Upload foto dokumentasi jika ada File baru
       if (editing.imageUrl instanceof File) {
         const res = await uploadFiles("imageUploader", {
           files: [editing.imageUrl],
-          headers,
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         if (res?.[0]) finalImageUrl = res[0].ufsUrl ?? res[0].url;
       }
@@ -90,7 +89,7 @@ export default function AdminExperiences() {
       if (editing.companyLogoUrl instanceof File) {
         const res = await uploadFiles("imageUploader", {
           files: [editing.companyLogoUrl],
-          headers,
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         if (res?.[0]) finalLogoUrl = res[0].ufsUrl ?? res[0].url;
       }
