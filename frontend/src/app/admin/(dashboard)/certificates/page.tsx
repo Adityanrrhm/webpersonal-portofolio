@@ -155,7 +155,7 @@ export default function AdminCertificates() {
 
       <p className="text-xs text-gray-400 mb-3">{searched.length} of {filtered.length} certificates</p>
 
-      <div className="bg-white rounded-xl border shadow-[0_4px_16px_rgba(0,0,0,0.08)] overflow-hidden">
+      <div className="bg-white rounded-xl border shadow-[0_4px_16px_rgba(0,0,0,0.08)] overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-gray-50 text-left text-gray-500">

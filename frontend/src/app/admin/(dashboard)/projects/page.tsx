@@ -116,7 +116,7 @@ export default function AdminProjects() {
         <h1 className="font-heading text-2xl font-bold">Projects</h1>
         <div className="h-10 w-32 bg-gray-200 rounded-lg" />
       </div>
-      <div className="animate-pulse rounded-xl border shadow-sm overflow-hidden bg-white">
+      <div className="animate-pulse rounded-xl border shadow-sm overflow-x-auto bg-white">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-gray-50 text-left">
@@ -182,7 +182,7 @@ export default function AdminProjects() {
         </svg>
       </div>
 
-      <div className="bg-white rounded-xl border shadow-[0_4px_16px_rgba(0,0,0,0.08)] overflow-hidden">
+      <div className="bg-white rounded-xl border shadow-[0_4px_16px_rgba(0,0,0,0.08)] overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-gray-50 text-left text-gray-500">

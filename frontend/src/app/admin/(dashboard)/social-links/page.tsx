@@ -74,7 +74,7 @@ export default function AdminSocialLinks() {
         <div className="h-8 w-40 bg-gray-200 rounded-lg" />
         <div className="h-10 w-28 bg-gray-200 rounded-lg" />
       </div>
-      <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border shadow-sm overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-gray-50 text-left text-gray-500">
@@ -120,7 +120,7 @@ export default function AdminSocialLinks() {
         </svg>
       </div>
 
-      <div className="bg-white rounded-xl border shadow-[0_4px_16px_rgba(0,0,0,0.08)] overflow-hidden">
+      <div className="bg-white rounded-xl border shadow-[0_4px_16px_rgba(0,0,0,0.08)] overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-gray-50 text-left text-gray-500">

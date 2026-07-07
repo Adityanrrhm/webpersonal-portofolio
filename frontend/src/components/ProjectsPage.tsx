@@ -132,7 +132,7 @@ function ProjectModal({
         exit={{ scale: 0.92, opacity: 0, y: 20 }}
         transition={{ type: "spring", stiffness: 350, damping: 28 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-2xl overflow-hidden shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row relative"
+        className="bg-white rounded-2xl overflow-y-auto md:overflow-hidden shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row relative"
       >
         <button
           onClick={onClose}

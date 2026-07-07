@@ -157,7 +157,7 @@ export default function AdminExperiences() {
         <h1 className="font-heading text-2xl font-bold">Experiences</h1>
         <div className="h-9 w-36 bg-gray-200 rounded-lg animate-pulse" />
       </div>
-      <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border shadow-sm overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-gray-50 text-left text-gray-500">
@@ -222,7 +222,7 @@ export default function AdminExperiences() {
         </svg>
       </div>
 
-      <div className="bg-white rounded-xl border shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl border shadow-sm overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-gray-50 text-left text-gray-500">

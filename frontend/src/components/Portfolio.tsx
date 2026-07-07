@@ -18,47 +18,49 @@ interface Project {
   githubUrl: string | null;
 }
 
-const CARD_W = 340;
 const GAP = 24;
-const STEP = CARD_W + GAP;
 
 function ProjectCard({
   project,
   cardIndex,
   carouselX,
   onTap,
+  cardWidth,
+  step,
 }: {
   project: Project;
   cardIndex: number;
   carouselX: ReturnType<typeof useMotionValue<number>>;
   onTap: () => void;
+  cardWidth: number;
+  step: number;
 }) {
-  const dist = useTransform(() => {
-    return Math.abs(carouselX.get() + cardIndex * STEP);
+  const dist = useTransform(carouselX, (x) => {
+    return Math.abs(x + cardIndex * step);
   });
 
   const cardScale = useTransform(dist, (d) => {
     if (d < 60) return 1;
-    if (d < STEP) return 1 - (1 - 0.85) * ((d - 60) / (STEP - 60));
+    if (d < step) return 1 - (1 - 0.85) * ((d - 60) / (step - 60));
     return 0.85;
   });
 
   const cardOpacity = useTransform(dist, (d) => {
     if (d < 80) return 1;
-    if (d < STEP * 1.2) return 0.7;
+    if (d < step * 1.2) return 0.7;
     return 0;
   });
 
   const cardZ = useTransform(dist, (d) => {
     if (d < 60) return 3;
-    if (d < STEP) return 2;
+    if (d < step) return 2;
     return 1;
   });
 
   const cardShadow = useTransform(dist, (d) => {
     if (d < 60)
       return "0 25px 60px rgba(0,0,0,0.10), 0 8px 20px rgba(0,0,0,0.06)";
-    if (d < STEP * 1.2) return "0 8px 24px rgba(0,0,0,0.06)";
+    if (d < step * 1.2) return "0 8px 24px rgba(0,0,0,0.06)";
     return "none";
   });
 
@@ -66,7 +68,7 @@ function ProjectCard({
     <motion.div
       className="shrink-0 rounded-[28px] overflow-hidden cursor-pointer will-change-transform"
       style={{
-        width: CARD_W,
+        width: cardWidth,
         scale: cardScale,
         opacity: cardOpacity,
         zIndex: cardZ,
@@ -86,7 +88,7 @@ function ProjectCard({
           <span className="text-[11px] font-medium text-white/70 mb-1 uppercase tracking-wider">
             {project.category}
           </span>
-          <h3 className="text-2xl font-bold text-white">{project.title}</h3>
+          <h3 className="text-2xl font-bold text-white leading-tight">{project.title}</h3>
         </div>
         <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-[11px] font-medium backdrop-blur-sm border border-white/20 text-white/90 bg-white/10">
           {project.label}
@@ -104,6 +106,23 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
   const [index, setIndex] = useState(0);
   const carouselX = useMotionValue(0);
 
+  // Responsive card width states
+  const [cardWidth, setCardWidth] = useState(340);
+  const step = cardWidth + GAP;
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 480) {
+        setCardWidth(285);
+      } else {
+        setCardWidth(340);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     fetchAPI<{ data: Project[] }>("projects")
       .then((res) => {
@@ -119,7 +138,7 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
   const goTo = useCallback(
     (i: number) => {
       const idx = Math.max(0, Math.min(i, maxIdx));
-      animate(carouselX, -idx * STEP, {
+      animate(carouselX, -idx * step, {
         type: "spring",
         stiffness: 300,
         damping: 28,
@@ -127,17 +146,16 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
       });
       setIndex(idx);
     },
-    [maxIdx, carouselX],
+    [maxIdx, carouselX, step],
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragEnd = useCallback(
     (_: any, info: { offset: { x: number }; velocity: { x: number } }) => {
       const current = carouselX.get();
-      const rawIdx = Math.round(-current / STEP);
+      const rawIdx = Math.round(-current / step);
       const clampedIdx = Math.max(0, Math.min(rawIdx, maxIdx));
 
-      animate(carouselX, -clampedIdx * STEP, {
+      animate(carouselX, -clampedIdx * step, {
         type: "spring",
         velocity: info.velocity.x,
         stiffness: 320,
@@ -147,8 +165,13 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
 
       setIndex(clampedIdx);
     },
-    [maxIdx, carouselX],
+    [maxIdx, carouselX, step],
   );
+
+  // Recenter carousel on width resize
+  useEffect(() => {
+    carouselX.set(-index * step);
+  }, [cardWidth, index, step, carouselX]);
 
   return (
     <section id="portfolio" className="py-20 overflow-hidden">
@@ -200,8 +223,8 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
               style={{ 
                 x: carouselX, 
                 gap: GAP,
-                paddingLeft: `calc(50% - ${CARD_W / 2}px)`,
-                paddingRight: `calc(50% - ${CARD_W / 2}px)`,
+                paddingLeft: `calc(50% - ${cardWidth / 2}px)`,
+                paddingRight: `calc(50% - ${cardWidth / 2}px)`,
               }}
               dragElastic={0.08}
               onDragEnd={handleDragEnd}
@@ -213,6 +236,8 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
                   cardIndex={i}
                   carouselX={carouselX}
                   onTap={() => goTo(i)}
+                  cardWidth={cardWidth}
+                  step={step}
                 />
               ))}
             </motion.div>
