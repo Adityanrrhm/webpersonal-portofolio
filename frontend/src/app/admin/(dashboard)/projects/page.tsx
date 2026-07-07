@@ -7,6 +7,7 @@ import { Plus, Pencil, Trash2, X, Loader2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
 import ImageUpload from "@/components/admin/ImageUpload";
+import TagInput from "@/components/admin/TagInput";
 import { useToast, Toast } from "@/components/admin/Toast";
 
 interface Project {
@@ -19,9 +20,10 @@ interface Project {
   imageUrl: string | File | null;
   liveUrl: string | null;
   githubUrl: string | null;
+  isPrivate: boolean;
 }
 
-const empty: Project = { id: 0, title: "", category: "", label: "", description: "", techStack: [], imageUrl: "", liveUrl: "", githubUrl: "" };
+const empty: Project = { id: 0, title: "", category: "", label: "", description: "", techStack: [], imageUrl: "", liveUrl: "", githubUrl: "", isPrivate: false };
 
 export default function AdminProjects() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -67,6 +69,7 @@ export default function AdminProjects() {
         image_url: finalImageUrl,
         live_url: editing.liveUrl || null,
         github_url: editing.githubUrl || null,
+        is_private: editing.isPrivate,
       };
       if (editing.id) {
         await apiAdmin(`admin/projects/${editing.id}`, { method: "PUT", body: JSON.stringify(body) });
@@ -249,7 +252,7 @@ export default function AdminProjects() {
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-1">Tech Stack</label>
-                <input value={editing.techStack.join(", ")} onChange={e => setEditing(p => ({ ...p, techStack: e.target.value.split(",").map(s => s.trim()).filter(Boolean) }))} placeholder="Separate with commas" className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/10" />
+                <TagInput value={editing.techStack} onChange={v => setEditing(p => ({ ...p, techStack: v }))} placeholder="Type tech name and press Enter" />
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-1">Image</label>
@@ -257,6 +260,15 @@ export default function AdminProjects() {
               </div>
               <Input label="Live URL" type="text" value={editing.liveUrl || ""} onChange={v => setEditing(p => ({ ...p, liveUrl: v }))} />
               <Input label="GitHub URL" type="text" value={editing.githubUrl || ""} onChange={v => setEditing(p => ({ ...p, githubUrl: v }))} />
+              <label className="flex items-center gap-2.5 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={editing.isPrivate}
+                  onChange={e => setEditing(p => ({ ...p, isPrivate: e.target.checked }))}
+                  className="w-4 h-4 rounded border-gray-300 text-zinc-900 focus:ring-zinc-900/20"
+                />
+                <span className="text-sm font-medium text-gray-700">Private Repository</span>
+              </label>
             </div>
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
               <button type="button" onClick={() => setModal(false)} disabled={isSaving} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97] disabled:opacity-50">Cancel</button>

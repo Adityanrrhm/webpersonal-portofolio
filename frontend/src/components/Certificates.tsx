@@ -149,7 +149,7 @@ function CardStack({
           >
             <div className="h-[340px] bg-gradient-to-b from-[#fcf9f5] to-[#f8f3ec] flex items-center justify-center p-5 overflow-hidden">
               {cert.imageUrl ? (
-                <img src={cert.imageUrl} alt={cert.title} className="w-full h-full rounded-[8px] object-cover" />
+                <img src={cert.imageUrl} alt={cert.title} className="w-full h-full rounded-[8px] object-contain" />
               ) : (
                 <div className="w-full h-full rounded-[8px] bg-white flex flex-col items-center justify-center p-5">
                   <div className="w-full max-w-[140px] flex flex-col items-center gap-2.5">

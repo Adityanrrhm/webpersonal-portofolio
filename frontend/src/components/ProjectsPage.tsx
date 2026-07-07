@@ -15,6 +15,7 @@ interface Project {
   imageUrl: string | null;
   liveUrl: string | null;
   githubUrl: string | null;
+  isPrivate: boolean;
 }
 
 const LABEL_COLORS: Record<string, string> = {
@@ -50,10 +51,10 @@ function ProjectCard({
       <div className="bg-white rounded-xl flex flex-col overflow-hidden">
         <div className="p-3 pb-1.5">
           <div
-            className={`rounded-lg h-44 ${project.imageUrl ? "" : "bg-gradient-to-br " + (LABEL_COLORS[project.label] || "from-gray-50 to-gray-100")} flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-[1.03]`}
+            className={`rounded-lg h-44 ${project.imageUrl ? "bg-gray-50" : "bg-gradient-to-br " + (LABEL_COLORS[project.label] || "from-gray-50 to-gray-100")} flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-[1.03]`}
           >
             {project.imageUrl ? (
-              <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+              <img src={project.imageUrl} alt={project.title} className="w-full h-full object-contain" />
             ) : (
               <div className="text-center w-full px-6">
                 <div className="max-w-[160px] mx-auto aspect-video bg-white/80 rounded border border-white/60 shadow-xs flex flex-col items-center justify-center backdrop-blur-sm">
@@ -142,10 +143,10 @@ function ProjectModal({
         </button>
 
         <div
-          className={`md:w-[60%] ${project.imageUrl ? "" : "bg-gradient-to-br " + (LABEL_COLORS[project.label] || "from-gray-50 to-gray-100")} p-0 flex items-center justify-center min-h-[220px] md:min-h-[400px] overflow-hidden`}
+          className={`md:w-[60%] ${project.imageUrl ? "bg-gray-50" : "bg-gradient-to-br " + (LABEL_COLORS[project.label] || "from-gray-50 to-gray-100")} p-0 flex items-center justify-center min-h-[220px] md:min-h-[400px] overflow-hidden`}
         >
           {project.imageUrl ? (
-            <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+            <img src={project.imageUrl} alt={project.title} className="w-full h-full object-contain" />
           ) : (
             <div className="w-full p-6 md:p-8">
               <div className="w-full max-w-md mx-auto">
@@ -207,13 +208,17 @@ function ProjectModal({
               )}
               {project.githubUrl && (
                 <a
-                  href={project.githubUrl}
+                  href={project.isPrivate ? undefined : project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border border-gray-200 text-gray-700 px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all active:scale-[0.97] cursor-pointer"
+                  className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all active:scale-[0.97] cursor-pointer ${
+                    project.isPrivate
+                      ? "border border-gray-200 text-gray-400 cursor-not-allowed"
+                      : "border border-gray-200 text-gray-700 hover:bg-gray-50"
+                  }`}
                 >
                   <GitBranch className="w-4 h-4" />
-                  Source Code
+                  {project.isPrivate ? "Private Repo" : "Source Code"}
                 </a>
               )}
             </div>

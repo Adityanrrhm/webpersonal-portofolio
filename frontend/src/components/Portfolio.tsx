@@ -78,9 +78,9 @@ function ProjectCard({
       whileTap={{ scale: 0.98, transition: { duration: 0.15 } }}
       onTap={onTap}
     >
-      <div className="aspect-[4/5] relative overflow-hidden">
+      <div className="aspect-[4/5] relative overflow-hidden bg-gray-50">
         {project.imageUrl ? (
-          <img src={project.imageUrl} alt={project.title} className="absolute inset-0 w-full h-full object-cover" />
+          <img src={project.imageUrl} alt={project.title} className="absolute inset-0 w-full h-full object-contain" />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200" />
         )}

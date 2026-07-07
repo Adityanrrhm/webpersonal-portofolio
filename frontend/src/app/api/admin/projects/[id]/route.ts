@@ -38,6 +38,8 @@ export async function PUT(
       data.live_url = body.live_url ?? body.liveUrl;
     if (body.github_url !== undefined || body.githubUrl !== undefined)
       data.github_url = body.github_url ?? body.githubUrl;
+    if (body.is_private !== undefined || body.isPrivate !== undefined)
+      data.is_private = body.is_private ?? body.isPrivate;
     if (body.sort_order !== undefined || body.sortOrder !== undefined)
       data.sort_order = body.sort_order ?? body.sortOrder;
     if (body.is_active !== undefined || body.isActive !== undefined)
@@ -59,6 +61,7 @@ export async function PUT(
         imageUrl: project.image_url,
         liveUrl: project.live_url,
         githubUrl: project.github_url,
+        isPrivate: project.is_private,
         sortOrder: project.sort_order,
         isActive: project.is_active,
       },

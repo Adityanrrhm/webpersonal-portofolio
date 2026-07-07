@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
       imageUrl: p.image_url,
       liveUrl: p.live_url,
       githubUrl: p.github_url,
+      isPrivate: p.is_private,
     }));
 
     return NextResponse.json({ data });

@@ -18,7 +18,11 @@ interface Experience {
   companyLogoUrl: string | null;
 }
 
-export default function Experience({ isPreview = false }: { isPreview?: boolean }) {
+export default function Experience({
+  isPreview = false,
+}: {
+  isPreview?: boolean;
+}) {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -41,10 +45,14 @@ export default function Experience({ isPreview = false }: { isPreview?: boolean 
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
         >
-          <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">(04) WORK HISTORY</p>
-          <h2 className="font-heading text-4xl md:text-5xl font-bold">Experience.</h2>
+          <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
+            (04) WORK HISTORY
+          </p>
+          <h2 className="font-heading text-4xl md:text-5xl font-bold">
+            Experience.
+          </h2>
         </motion.div>
-        
+
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -52,7 +60,10 @@ export default function Experience({ isPreview = false }: { isPreview?: boolean 
           className="mt-6 md:mt-0"
         >
           {isPreview && (
-            <Link href="/experience" className="inline-block border border-gray-200 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all active:scale-[0.97] cursor-pointer">
+            <Link
+              href="/experience"
+              className="inline-block border border-gray-200 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all active:scale-[0.97] cursor-pointer"
+            >
               View All Experience ↗
             </Link>
           )}
@@ -93,8 +104,10 @@ export default function Experience({ isPreview = false }: { isPreview?: boolean 
                 {/* Content area */}
                 <div className="md:col-span-8">
                   <h3 className="text-xl font-bold">{exp.role}</h3>
-                  <p className="text-gray-500 mb-4">{exp.company} • {exp.type}</p>
-                  
+                  <p className="text-gray-500 mb-4">
+                    {exp.company} • {exp.type}
+                  </p>
+
                   {exp.points.length > 0 && (
                     <ul className="space-y-3 text-gray-600 text-sm md:text-base mb-6">
                       {exp.points.map((point, i) => (
@@ -127,15 +140,13 @@ export default function Experience({ isPreview = false }: { isPreview?: boolean 
 
                       {/* Logo company badge — pojok kanan atas */}
                       {exp.companyLogoUrl && (
-                        <div className="absolute top-2.5 right-2.5 w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-md flex items-center justify-center overflow-hidden p-1">
-                          <Image
-                            src={exp.companyLogoUrl}
-                            alt={exp.company}
-                            width={32}
-                            height={32}
-                            className="object-contain"
-                          />
-                        </div>
+                        <Image
+                          src={exp.companyLogoUrl}
+                          alt={exp.company}
+                          width={56}
+                          height={56}
+                          className="absolute top-2 right-2 object-contain drop-shadow-lg"
+                        />
                       )}
                     </motion.div>
                   )}
@@ -143,23 +154,22 @@ export default function Experience({ isPreview = false }: { isPreview?: boolean 
                   {/* Jika tidak ada foto tapi ada logo, tampilkan logo saja */}
                   {!exp.imageUrl && exp.companyLogoUrl && (
                     <div className="flex items-center gap-3 mt-2">
-                      <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center overflow-hidden p-1">
-                        <Image
-                          src={exp.companyLogoUrl}
-                          alt={exp.company}
-                          width={32}
-                          height={32}
-                          className="object-contain"
-                        />
-                      </div>
+                      <Image
+                        src={exp.companyLogoUrl}
+                        alt={exp.company}
+                        width={40}
+                        height={40}
+                        className="object-contain"
+                      />
                       <span className="text-sm text-gray-400">{exp.company}</span>
                     </div>
                   )}
                 </div>
-                
+
                 {/* Period — kanan */}
                 <div className="md:col-span-4 mt-4 md:mt-0 text-gray-400 text-sm md:text-right font-medium">
-                  {exp.periodStart}{exp.periodEnd ? ` — ${exp.periodEnd}` : " — Present"}
+                  {exp.periodStart}
+                  {exp.periodEnd ? ` — ${exp.periodEnd}` : " — Present"}
                 </div>
               </div>
             </motion.div>
