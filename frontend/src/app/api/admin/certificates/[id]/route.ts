@@ -34,10 +34,16 @@ export async function PUT(
     if (body.credential_id !== undefined || body.credentialId !== undefined)
       data.credential_id = body.credential_id ?? body.credentialId;
     if (body.description !== undefined) data.description = body.description;
-    if (body.image_url !== undefined || body.imageUrl !== undefined)
-      data.image_url = body.image_url ?? body.imageUrl;
-    if (body.credential_url !== undefined || body.credentialUrl !== undefined)
-      data.credential_url = body.credential_url ?? body.credentialUrl;
+    if (body.image_url !== undefined) {
+      data.image_url = body.image_url;
+    } else if (body.imageUrl !== undefined) {
+      data.image_url = body.imageUrl;
+    }
+    if (body.credential_url !== undefined) {
+      data.credential_url = body.credential_url;
+    } else if (body.credentialUrl !== undefined) {
+      data.credential_url = body.credentialUrl;
+    }
     if (body.sort_order !== undefined || body.sortOrder !== undefined)
       data.sort_order = body.sort_order ?? body.sortOrder;
     if (body.is_active !== undefined || body.isActive !== undefined)

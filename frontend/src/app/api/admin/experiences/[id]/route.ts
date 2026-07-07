@@ -34,10 +34,16 @@ export async function PUT(
     if (body.period_end !== undefined || body.periodEnd !== undefined)
       data.period_end = body.period_end ?? body.periodEnd;
     if (body.points !== undefined) data.points = body.points;
-    if (body.image_url !== undefined || body.imageUrl !== undefined)
-      data.image_url = body.image_url ?? body.imageUrl;
-    if (body.company_logo_url !== undefined || body.companyLogoUrl !== undefined)
-      data.company_logo_url = body.company_logo_url ?? body.companyLogoUrl;
+    if (body.image_url !== undefined) {
+      data.image_url = body.image_url;
+    } else if (body.imageUrl !== undefined) {
+      data.image_url = body.imageUrl;
+    }
+    if (body.company_logo_url !== undefined) {
+      data.company_logo_url = body.company_logo_url;
+    } else if (body.companyLogoUrl !== undefined) {
+      data.company_logo_url = body.companyLogoUrl;
+    }
     if (body.sort_order !== undefined || body.sortOrder !== undefined)
       data.sort_order = body.sort_order ?? body.sortOrder;
     if (body.is_active !== undefined || body.isActive !== undefined)

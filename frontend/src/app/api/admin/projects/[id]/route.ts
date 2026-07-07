@@ -32,8 +32,11 @@ export async function PUT(
     if (body.description !== undefined) data.description = body.description;
     if (body.tech_stack !== undefined || body.techStack !== undefined)
       data.tech_stack = body.tech_stack ?? body.techStack;
-    if (body.image_url !== undefined || body.imageUrl !== undefined)
-      data.image_url = body.image_url ?? body.imageUrl;
+    if (body.image_url !== undefined) {
+      data.image_url = body.image_url;
+    } else if (body.imageUrl !== undefined) {
+      data.image_url = body.imageUrl;
+    }
     if (body.live_url !== undefined || body.liveUrl !== undefined)
       data.live_url = body.live_url ?? body.liveUrl;
     if (body.github_url !== undefined || body.githubUrl !== undefined)

@@ -14,8 +14,16 @@ export async function PUT(request: NextRequest) {
     if (body.name !== undefined) data.name = body.name;
     if (body.title !== undefined) data.title = body.title;
     if (body.bio !== undefined) data.bio = body.bio;
-    if (body.photo_url !== undefined) data.photo_url = body.photo_url;
-    if (body.cv_url !== undefined) data.cv_url = body.cv_url;
+    if (body.photo_url !== undefined) {
+      data.photo_url = body.photo_url;
+    } else if (body.photoUrl !== undefined) {
+      data.photo_url = body.photoUrl;
+    }
+    if (body.cv_url !== undefined) {
+      data.cv_url = body.cv_url;
+    } else if (body.cvUrl !== undefined) {
+      data.cv_url = body.cvUrl;
+    }
     if (body.email !== undefined) data.email = body.email;
     if (body.location !== undefined) data.location = body.location;
     if (body.focus !== undefined) data.focus = body.focus;

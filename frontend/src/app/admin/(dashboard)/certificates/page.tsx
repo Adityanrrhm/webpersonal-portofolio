@@ -174,10 +174,11 @@ export default function AdminCertificates() {
             {searched.map((c) => (
               <tr key={c.id} className="border-b last:border-0 hover:bg-gray-50">
                 <td className="px-4 py-3">
-                  {editing.imageUrl && typeof editing.imageUrl === "string" || (c.imageUrl && typeof c.imageUrl === "string")
-                    ? <img src={typeof c.imageUrl === "string" ? c.imageUrl : ""} alt="" className="w-10 h-10 rounded-lg object-cover border" />
-                    : <div className="w-10 h-10 rounded-lg bg-gray-100 border" />
-                  }
+                  {c.imageUrl && typeof c.imageUrl === "string" ? (
+                    <img src={c.imageUrl} alt="" className="w-10 h-10 rounded-lg object-cover border" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 border" />
+                  )}
                 </td>
                 <td className="px-4 py-3 font-medium">{c.title}</td>
                 <td className="px-4 py-3 text-gray-500">{c.org}</td>

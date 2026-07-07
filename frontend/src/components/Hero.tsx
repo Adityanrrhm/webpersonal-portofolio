@@ -44,13 +44,23 @@ export default function Hero() {
           >
             <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200/50"></div>
 
-            <Image
-              src={profile?.photoUrl || "/assets/fotogw.png"}
-              alt={profile?.name || "Aditya Nur Rohim"}
-              fill
-              priority
-              className="object-cover object-bottom z-10 scale-105 group-hover:scale-110 transition-transform duration-500"
-            />
+            {profile?.photoUrl ? (
+              <Image
+                src={profile.photoUrl}
+                alt={profile.name || "Aditya Nur Rohim"}
+                fill
+                priority
+                className="object-cover object-bottom z-10 scale-105 group-hover:scale-110 transition-transform duration-500"
+              />
+            ) : (
+              <Image
+                src="/assets/fotogw.png"
+                alt="Aditya Nur Rohim"
+                fill
+                priority
+                className="object-cover object-bottom z-10 scale-105 group-hover:scale-110 transition-transform duration-500"
+              />
+            )}
           </motion.div>
         </motion.div>
 
@@ -68,7 +78,8 @@ export default function Hero() {
           </h1>
 
           <p className="text-gray-600 max-w-xl text-lg md:text-xl leading-relaxed">
-            {profile?.bio || "Passionate about Data Analytics and Cloud Computing, transforming data into actionable insights while building scalable and reliable cloud-based solutions."}
+            {profile?.bio ||
+              "Passionate about Data Analytics and Cloud Computing, transforming data into actionable insights while building scalable and reliable cloud-based solutions."}
           </p>
         </motion.div>
       </div>
