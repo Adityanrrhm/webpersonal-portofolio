@@ -42,7 +42,10 @@ function getCaCert(): string | undefined {
 }
 
 function createClient() {
-  const url = new URL(process.env.DATABASE_URL!);
+  if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL environment variable is required");
+  }
+  const url = new URL(process.env.DATABASE_URL);
   const caCert = getCaCert();
 
   const adapter = new PrismaMariaDb(

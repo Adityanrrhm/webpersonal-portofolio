@@ -3,7 +3,11 @@ import jwt from "jsonwebtoken";
 import { NextRequest } from "next/server";
 import { getPrisma } from "./prisma";
 
-const SECRET = process.env.JWT_SECRET || "fallback-secret-change-me";
+const secret = process.env.JWT_SECRET;
+if (!secret) {
+  throw new Error("JWT_SECRET environment variable is required");
+}
+const SECRET: string = secret;
 
 export interface JwtPayload {
   userId: number;
@@ -18,7 +22,7 @@ export function verifyPassword(password: string, hash: string): boolean {
 }
 
 export function signToken(userId: number): string {
-  return jwt.sign({ userId } satisfies JwtPayload, SECRET, { expiresIn: "7d" });
+  return jwt.sign({ userId } satisfies JwtPayload, SECRET, { expiresIn: "24h" });
 }
 
 export function verifyToken(token: string): JwtPayload | null {

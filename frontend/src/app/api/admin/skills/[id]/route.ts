@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAuth } from "@/lib/auth";
 import { getPrisma } from "@/lib/prisma";
 
 export async function PUT(
@@ -7,8 +6,6 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const prisma = getPrisma();
-  const user = await verifyAuth(request);
-  if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
 
@@ -56,8 +53,6 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const prisma = getPrisma();
-  const user = await verifyAuth(request);
-  if (!user) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
 
   const { id } = await params;
 
