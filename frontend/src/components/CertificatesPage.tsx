@@ -9,6 +9,7 @@ import {
   AnimatePresence,
 } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, ExternalLink } from "lucide-react";
+import Img from "@/components/Img";
 import { fetchAPI, wrapData } from "@/lib/api";
 
 interface Certificate {
@@ -85,7 +86,7 @@ const CertificateCard = memo(function CertificateCard({
         <div className="flex-1 p-4 pb-2">
           <div className="rounded-lg h-full bg-gradient-to-br from-gray-50 to-gray-100 shadow-sm flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-[1.03]">
             {cert.imageUrl ? (
-              <img src={cert.imageUrl} alt={cert.title} className="w-full h-full object-contain" />
+              <Img src={cert.imageUrl} alt={cert.title} containerClassName="w-full h-full" imgClassName="w-full h-full object-contain" />
             ) : (
               <div className="text-center w-full px-6">
                 <div className="max-w-[200px] mx-auto aspect-[4/3] bg-white rounded border border-gray-100 shadow-xs flex flex-col items-center justify-center">
@@ -169,7 +170,7 @@ function CertificateModal({
 
         <div className="md:w-1/2 bg-gradient-to-br from-gray-50 to-gray-100 p-0 md:p-0 flex items-center justify-center min-h-[220px] md:min-h-[400px] overflow-hidden">
           {cert.imageUrl ? (
-            <img src={cert.imageUrl} alt={cert.title} className="w-full h-full object-contain" />
+            <Img src={cert.imageUrl} alt={cert.title} containerClassName="w-full h-full" imgClassName="w-full h-full object-contain" />
           ) : (
             <div className="w-full p-6 md:p-8">
               <div className="w-full max-w-sm mx-auto">

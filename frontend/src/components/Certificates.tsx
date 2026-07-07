@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { ZoomIn, ExternalLink, X } from "lucide-react";
+import Img from "@/components/Img";
 import { fetchAPI, wrapData } from "@/lib/api";
 
 interface Certificate {
@@ -149,7 +150,7 @@ function CardStack({
           >
             <div className="h-[340px] bg-gradient-to-b from-[#fcf9f5] to-[#f8f3ec] flex items-center justify-center p-5 overflow-hidden">
               {cert.imageUrl ? (
-                <img src={cert.imageUrl} alt={cert.title} className="w-full h-full rounded-[8px] object-contain" />
+                <Img src={cert.imageUrl} alt={cert.title} containerClassName="w-full h-full rounded-[8px]" imgClassName="w-full h-full object-contain" />
               ) : (
                 <div className="w-full h-full rounded-[8px] bg-white flex flex-col items-center justify-center p-5">
                   <div className="w-full max-w-[140px] flex flex-col items-center gap-2.5">
@@ -274,7 +275,7 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
             >
               <div className="flex-1 bg-gradient-to-b from-[#fcf9f5] to-[#f8f3ec] flex items-center justify-center p-8 min-h-0 overflow-hidden">
                 {modalCert.imageUrl ? (
-                  <img src={modalCert.imageUrl} alt={modalCert.title} className="w-full h-full rounded-[10px] object-contain" />
+                  <Img src={modalCert.imageUrl} alt={modalCert.title} containerClassName="w-full h-full rounded-[10px]" imgClassName="w-full h-full object-contain" />
                 ) : (
                   <div className="w-full h-full max-h-full rounded-[10px] bg-white flex flex-col items-center justify-center p-8">
                     <div className="max-w-[240px] flex flex-col items-center gap-3">

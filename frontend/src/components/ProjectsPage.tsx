@@ -3,6 +3,7 @@
 import { useState, useEffect, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ExternalLink, GitBranch } from "lucide-react";
+import Img from "@/components/Img";
 import { fetchAPI, wrapData } from "@/lib/api";
 
 interface Project {
@@ -54,7 +55,7 @@ function ProjectCard({
             className={`rounded-lg h-44 ${project.imageUrl ? "bg-gray-50" : "bg-gradient-to-br " + (LABEL_COLORS[project.label] || "from-gray-50 to-gray-100")} flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-[1.03]`}
           >
             {project.imageUrl ? (
-              <img src={project.imageUrl} alt={project.title} className="w-full h-full object-contain" />
+              <Img src={project.imageUrl} alt={project.title} containerClassName="w-full h-full" imgClassName="w-full h-full object-contain" />
             ) : (
               <div className="text-center w-full px-6">
                 <div className="max-w-[160px] mx-auto aspect-video bg-white/80 rounded border border-white/60 shadow-xs flex flex-col items-center justify-center backdrop-blur-sm">
@@ -146,7 +147,7 @@ function ProjectModal({
           className={`md:w-[60%] ${project.imageUrl ? "bg-gray-50" : "bg-gradient-to-br " + (LABEL_COLORS[project.label] || "from-gray-50 to-gray-100")} p-0 flex items-center justify-center min-h-[220px] md:min-h-[400px] overflow-hidden`}
         >
           {project.imageUrl ? (
-            <img src={project.imageUrl} alt={project.title} className="w-full h-full object-contain" />
+            <Img src={project.imageUrl} alt={project.title} containerClassName="w-full h-full" imgClassName="w-full h-full object-contain" />
           ) : (
             <div className="w-full p-6 md:p-8">
               <div className="w-full max-w-md mx-auto">
