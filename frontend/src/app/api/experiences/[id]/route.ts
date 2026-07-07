@@ -27,6 +27,8 @@ export async function GET(
       periodStart: experience.period_start,
       periodEnd: experience.period_end,
       points: experience.points,
+      imageUrl: experience.image_url,
+      companyLogoUrl: experience.company_logo_url,
     };
 
     return NextResponse.json({ data });

@@ -147,7 +147,7 @@ function CardStack({
                   : "0 2px 8px rgba(0,0,0,0.03)",
             }}
           >
-            <div className="aspect-[4/5] bg-gradient-to-b from-[#fcf9f5] to-[#f8f3ec] flex items-center justify-center p-5 overflow-hidden">
+            <div className="h-[340px] bg-gradient-to-b from-[#fcf9f5] to-[#f8f3ec] flex items-center justify-center p-5 overflow-hidden">
               {cert.imageUrl ? (
                 <img src={cert.imageUrl} alt={cert.title} className="w-full h-full rounded-[8px] object-cover" />
               ) : (

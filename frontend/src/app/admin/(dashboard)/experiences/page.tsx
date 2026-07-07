@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useEffect, type FormEvent } from "react";
-import { apiAdmin } from "@/lib/apiAdmin";
+import { apiAdmin, getToken } from "@/lib/apiAdmin";
+import { uploadFiles } from "@/lib/uploadthing";
 import { Plus, Pencil, Trash2, X, Loader2 } from "lucide-react";
 import ConfirmDialog from "@/components/admin/ConfirmDialog";
+import ImageUpload from "@/components/admin/ImageUpload";
 import { useToast, Toast } from "@/components/admin/Toast";
 
 interface Experience {
@@ -14,15 +16,29 @@ interface Experience {
   periodStart: string;
   periodEnd: string | null;
   points: string[];
+  imageUrl: string | File | null;
+  companyLogoUrl: string | File | null;
 }
 
-const empty: Experience = { id: 0, role: "", company: "", type: "", periodStart: "", periodEnd: "", points: [] };
+const empty: Experience = {
+  id: 0,
+  role: "",
+  company: "",
+  type: "",
+  periodStart: "",
+  periodEnd: "",
+  points: [],
+  imageUrl: null,
+  companyLogoUrl: null,
+};
 
 export default function AdminExperiences() {
   const [items, setItems] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [editing, setEditing] = useState<Experience>(empty);
+  const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
+  const [originalLogoUrl, setOriginalLogoUrl] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [activeType, setActiveType] = useState("All");
   const [search, setSearch] = useState("");
@@ -30,24 +46,66 @@ export default function AdminExperiences() {
   const [isDeleting, setIsDeleting] = useState(false);
   const { toast, showToast, dismissToast } = useToast();
 
-  useEffect(() => { fetch(); }, []);
-  const fetch = () => apiAdmin<{ data: Experience[] }>("admin/experiences").then(r => { setItems(r.data); setLoading(false); });
+  useEffect(() => { fetchData(); }, []);
+  const fetchData = () =>
+    apiAdmin<{ data: Experience[] }>("admin/experiences").then((r) => {
+      setItems(r.data);
+      setLoading(false);
+    });
 
-  const openCreate = () => { setEditing(empty); setModal(true); };
-  const openEdit = (e: Experience) => { setEditing(e); setModal(true); };
+  const openCreate = () => {
+    setEditing(empty);
+    setOriginalImageUrl(null);
+    setOriginalLogoUrl(null);
+    setModal(true);
+  };
+  const openEdit = (e: Experience) => {
+    setEditing(e);
+    setOriginalImageUrl(typeof e.imageUrl === "string" ? e.imageUrl : null);
+    setOriginalLogoUrl(typeof e.companyLogoUrl === "string" ? e.companyLogoUrl : null);
+    setModal(true);
+  };
 
   const save = async (e: FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
-    const body = {
-      role: editing.role,
-      company: editing.company,
-      type: editing.type,
-      period_start: editing.periodStart,
-      period_end: editing.periodEnd || null,
-      points: editing.points,
-    };
+
+    let finalImageUrl = typeof editing.imageUrl === "string" ? editing.imageUrl : null;
+    let finalLogoUrl = typeof editing.companyLogoUrl === "string" ? editing.companyLogoUrl : null;
+
     try {
+      const token = getToken();
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      // Upload foto dokumentasi jika ada File baru
+      if (editing.imageUrl instanceof File) {
+        const res = await uploadFiles("imageUploader", {
+          files: [editing.imageUrl],
+          headers,
+        });
+        if (res?.[0]) finalImageUrl = res[0].ufsUrl ?? res[0].url;
+      }
+
+      // Upload logo company jika ada File baru
+      if (editing.companyLogoUrl instanceof File) {
+        const res = await uploadFiles("imageUploader", {
+          files: [editing.companyLogoUrl],
+          headers,
+        });
+        if (res?.[0]) finalLogoUrl = res[0].ufsUrl ?? res[0].url;
+      }
+
+      const body = {
+        role: editing.role,
+        company: editing.company,
+        type: editing.type,
+        period_start: editing.periodStart,
+        period_end: editing.periodEnd || null,
+        points: editing.points,
+        image_url: finalImageUrl,
+        company_logo_url: finalLogoUrl,
+      };
+
       if (editing.id) {
         await apiAdmin(`admin/experiences/${editing.id}`, { method: "PUT", body: JSON.stringify(body) });
         showToast("Experience updated!", "success");
@@ -55,8 +113,23 @@ export default function AdminExperiences() {
         await apiAdmin("admin/experiences", { method: "POST", body: JSON.stringify(body) });
         showToast("Experience created!", "success");
       }
+
+      // Hapus gambar lama dari UploadThing jika berubah
+      if (originalImageUrl && originalImageUrl !== finalImageUrl) {
+        await apiAdmin("uploadthing/delete", {
+          method: "POST",
+          body: JSON.stringify({ url: originalImageUrl }),
+        }).catch((err) => console.error("Failed to delete old image:", err));
+      }
+      if (originalLogoUrl && originalLogoUrl !== finalLogoUrl) {
+        await apiAdmin("uploadthing/delete", {
+          method: "POST",
+          body: JSON.stringify({ url: originalLogoUrl }),
+        }).catch((err) => console.error("Failed to delete old logo:", err));
+      }
+
       setModal(false);
-      fetch();
+      fetchData();
     } catch {
       showToast("Failed to save experience", "error");
     } finally {
@@ -71,7 +144,7 @@ export default function AdminExperiences() {
       await apiAdmin(`admin/experiences/${deleteId}`, { method: "DELETE" });
       showToast("Experience deleted!", "success");
       setDeleteId(null);
-      fetch();
+      fetchData();
     } catch {
       showToast("Failed to delete experience", "error");
     } finally {
@@ -89,6 +162,7 @@ export default function AdminExperiences() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-gray-50 text-left text-gray-500">
+              <th className="px-4 py-3 font-medium w-14">Logo</th>
               <th className="px-4 py-3 font-medium">Role</th>
               <th className="px-4 py-3 font-medium">Company</th>
               <th className="px-4 py-3 font-medium">Type</th>
@@ -99,9 +173,9 @@ export default function AdminExperiences() {
           <tbody>
             {Array.from({ length: 4 }).map((_, i) => (
               <tr key={i} className="border-b last:border-0">
-                {Array.from({ length: 5 }).map((__, j) => (
+                {Array.from({ length: 6 }).map((__, j) => (
                   <td key={j} className="px-4 py-3">
-                    <div className="h-4 bg-gray-200 rounded animate-pulse" style={{ width: j === 4 ? 64 : j === 2 ? 48 : undefined }} />
+                    <div className="h-4 bg-gray-200 rounded animate-pulse" style={{ width: j === 5 ? 64 : j === 3 ? 48 : undefined }} />
                   </td>
                 ))}
               </tr>
@@ -153,6 +227,7 @@ export default function AdminExperiences() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-gray-50 text-left text-gray-500">
+              <th className="px-4 py-3 font-medium w-14">Logo</th>
               <th className="px-4 py-3 font-medium">Role</th>
               <th className="px-4 py-3 font-medium">Company</th>
               <th className="px-4 py-3 font-medium">Type</th>
@@ -162,10 +237,19 @@ export default function AdminExperiences() {
           </thead>
           <tbody>
             {searched.length === 0 && (
-              <tr><td colSpan={5} className="px-4 py-12 text-center text-gray-400">No experiences yet.</td></tr>
+              <tr><td colSpan={6} className="px-4 py-12 text-center text-gray-400">No experiences yet.</td></tr>
             )}
             {searched.map((e) => (
               <tr key={e.id} className="border-b last:border-0 hover:bg-gray-50">
+                <td className="px-4 py-3">
+                  {e.companyLogoUrl && typeof e.companyLogoUrl === "string" ? (
+                    <img src={e.companyLogoUrl} alt={e.company} className="w-10 h-10 rounded-lg object-contain border bg-white p-1" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-lg bg-gray-100 border flex items-center justify-center text-gray-400 text-xs font-bold">
+                      {e.company.charAt(0).toUpperCase()}
+                    </div>
+                  )}
+                </td>
                 <td className="px-4 py-3 font-medium">{e.role}</td>
                 <td className="px-4 py-3 text-gray-500">{e.company}</td>
                 <td className="px-4 py-3"><span className="px-2 py-0.5 rounded-full text-xs bg-gray-100">{e.type}</span></td>
@@ -202,6 +286,30 @@ export default function AdminExperiences() {
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-1">Points (one per line)</label>
                 <textarea value={editing.points.join("\n")} onChange={e => setEditing(p => ({ ...p, points: e.target.value.split("\n").filter(Boolean) }))} rows={5} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/10" placeholder="Describe responsibilities, one per line" />
+              </div>
+
+              {/* Foto Dokumentasi */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1">
+                  Foto Dokumentasi
+                  <span className="text-xs text-gray-400 font-normal ml-1">(opsional)</span>
+                </label>
+                <ImageUpload
+                  value={editing.imageUrl || ""}
+                  onChange={v => setEditing(p => ({ ...p, imageUrl: v }))}
+                />
+              </div>
+
+              {/* Logo Company */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1">
+                  Logo Company
+                  <span className="text-xs text-gray-400 font-normal ml-1">(tampil sebagai badge kecil)</span>
+                </label>
+                <ImageUpload
+                  value={editing.companyLogoUrl || ""}
+                  onChange={v => setEditing(p => ({ ...p, companyLogoUrl: v }))}
+                />
               </div>
             </div>
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t">

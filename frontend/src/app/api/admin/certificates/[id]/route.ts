@@ -1,6 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAuth } from "@/lib/auth";
 import { getPrisma } from "@/lib/prisma";
+import { UTApi } from "uploadthing/server";
+
+const utapi = new UTApi();
+
+/** Ekstrak file key dari URL UploadThing */
+function extractFileKey(url: string): string | null {
+  if (!url) return null;
+  const parts = url.split("/");
+  return parts.pop() ?? null;
+}
 
 export async function PUT(
   request: NextRequest,
@@ -72,7 +82,25 @@ export async function DELETE(
   const { id } = await params;
 
   try {
+    // Fetch dulu untuk dapat image_url sebelum dihapus
+    const existing = await prisma.certificates.findUnique({
+      where: { id: Number(id) },
+      select: { image_url: true },
+    });
+
+    // Hapus record dari DB
     await prisma.certificates.delete({ where: { id: Number(id) } });
+
+    // Auto-delete gambar dari UploadThing jika ada
+    if (existing?.image_url) {
+      const fileKey = extractFileKey(existing.image_url);
+      if (fileKey) {
+        await utapi.deleteFiles(fileKey).catch((err) =>
+          console.error("[CERT_DELETE] Failed to delete image from UploadThing:", err)
+        );
+      }
+    }
+
     return NextResponse.json({ message: "Deleted" });
   } catch {
     return NextResponse.json(

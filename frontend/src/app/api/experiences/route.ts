@@ -17,6 +17,8 @@ export async function GET(request: NextRequest) {
       periodStart: e.period_start,
       periodEnd: e.period_end,
       points: e.points,
+      imageUrl: e.image_url,
+      companyLogoUrl: e.company_logo_url,
     }));
 
     return NextResponse.json({ data });

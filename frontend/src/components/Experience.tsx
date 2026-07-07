@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { fetchAPI, wrapData } from "@/lib/api";
 
 interface Experience {
@@ -13,6 +14,8 @@ interface Experience {
   periodStart: string;
   periodEnd: string | null;
   points: string[];
+  imageUrl: string | null;
+  companyLogoUrl: string | null;
 }
 
 export default function Experience({ isPreview = false }: { isPreview?: boolean }) {
@@ -82,16 +85,18 @@ export default function Experience({ isPreview = false }: { isPreview?: boolean 
               transition={{ delay: index * 0.1 }}
               className="relative pl-8 pb-16 last:pb-0"
             >
+              {/* Timeline line & dot */}
               <div className="absolute left-[5px] top-2 bottom-0 w-px bg-gray-200"></div>
               <div className="absolute left-0 top-2.5 w-2.5 h-2.5 rounded-full bg-black border border-white"></div>
 
               <div className="md:grid md:grid-cols-12 gap-8 items-start">
+                {/* Content area */}
                 <div className="md:col-span-8">
                   <h3 className="text-xl font-bold">{exp.role}</h3>
                   <p className="text-gray-500 mb-4">{exp.company} • {exp.type}</p>
                   
                   {exp.points.length > 0 && (
-                    <ul className="space-y-3 text-gray-600 text-sm md:text-base">
+                    <ul className="space-y-3 text-gray-600 text-sm md:text-base mb-6">
                       {exp.points.map((point, i) => (
                         <li key={i} className="flex gap-3">
                           <span className="text-gray-300 mt-1">•</span>
@@ -100,10 +105,61 @@ export default function Experience({ isPreview = false }: { isPreview?: boolean 
                       ))}
                     </ul>
                   )}
+
+                  {/* Foto Dokumentasi dengan Logo Badge */}
+                  {exp.imageUrl && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.97 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      className="relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm w-full max-w-sm"
+                    >
+                      {/* Foto dokumentasi */}
+                      <div className="relative w-full aspect-[4/3]">
+                        <Image
+                          src={exp.imageUrl}
+                          alt={`${exp.company} documentation`}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 384px"
+                        />
+                      </div>
+
+                      {/* Logo company badge — pojok kanan atas */}
+                      {exp.companyLogoUrl && (
+                        <div className="absolute top-2.5 right-2.5 w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-md flex items-center justify-center overflow-hidden p-1">
+                          <Image
+                            src={exp.companyLogoUrl}
+                            alt={exp.company}
+                            width={32}
+                            height={32}
+                            className="object-contain"
+                          />
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+
+                  {/* Jika tidak ada foto tapi ada logo, tampilkan logo saja */}
+                  {!exp.imageUrl && exp.companyLogoUrl && (
+                    <div className="flex items-center gap-3 mt-2">
+                      <div className="w-10 h-10 rounded-xl bg-white border border-gray-100 shadow-sm flex items-center justify-center overflow-hidden p-1">
+                        <Image
+                          src={exp.companyLogoUrl}
+                          alt={exp.company}
+                          width={32}
+                          height={32}
+                          className="object-contain"
+                        />
+                      </div>
+                      <span className="text-sm text-gray-400">{exp.company}</span>
+                    </div>
+                  )}
                 </div>
                 
+                {/* Period — kanan */}
                 <div className="md:col-span-4 mt-4 md:mt-0 text-gray-400 text-sm md:text-right font-medium">
-                  {exp.periodStart}{exp.periodEnd ? ` — ${exp.periodEnd}` : ""}
+                  {exp.periodStart}{exp.periodEnd ? ` — ${exp.periodEnd}` : " — Present"}
                 </div>
               </div>
             </motion.div>
