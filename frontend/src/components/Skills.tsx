@@ -75,8 +75,8 @@ export default function Skills() {
         className="max-w-4xl w-full px-6 md:px-12 text-center relative z-20"
       >
         <h2 className="font-heading text-4xl md:text-6xl lg:text-[5rem] font-bold tracking-tighter leading-[1.1] mb-8">
-          Transforming <span className="text-gray-400">data</span> into{" "}
-          <span className="text-gray-400">insights</span>.
+          Turning <span className="text-gray-400">data</span> into{" "}
+          <span className="text-gray-400">decisions</span>.
         </h2>
 
         <p className="text-lg md:text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto font-medium">

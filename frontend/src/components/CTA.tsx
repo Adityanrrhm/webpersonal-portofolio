@@ -66,8 +66,8 @@ export default function CTA() {
         </h2>
 
         <p className="text-base sm:text-lg text-gray-500 mb-8 md:mb-12 max-w-2xl mx-auto">
-          For partnerships, campaigns, creator collaborations, or market-entry
-          storytelling aimed at Indonesian audiences, reach out directly.
+          Looking to collaborate? Whether it's data, cloud, or product — let's
+          talk.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

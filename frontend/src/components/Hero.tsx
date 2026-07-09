@@ -91,7 +91,7 @@ export default function Hero() {
 
           <p className="text-gray-600 max-w-xl text-base sm:text-lg md:text-xl leading-relaxed">
             {profile?.bio ||
-              "Passionate about Data Analytics and Cloud Computing, transforming data into actionable insights while building scalable and reliable cloud-based solutions."}
+              "I help businesses make sense of their data — from cleaning messy datasets to building cloud infrastructure that scales."}
           </p>
         </motion.div>
       </div>
