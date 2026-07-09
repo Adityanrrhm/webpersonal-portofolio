@@ -14,7 +14,7 @@ interface Experience {
   periodStart: string;
   periodEnd: string | null;
   points: string[];
-  imageUrl: string | null;
+  imageUrls: string[];
   companyLogoUrl: string | null;
 }
 
@@ -134,49 +134,53 @@ export default function Experience({
                   )}
 
                   {/* Foto Dokumentasi dengan Logo Badge */}
-                  {exp.imageUrl && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.97 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      className="relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm w-full max-w-sm"
-                    >
-                      {/* Foto dokumentasi */}
-                      <div
-                        className="relative w-full aspect-[4/3] bg-gray-50 flex items-center justify-center cursor-pointer group"
-                        onClick={() => setModalImage(exp.imageUrl!)}
-                      >
-                        <Image
-                          src={exp.imageUrl}
-                          alt={`${exp.company} documentation`}
-                          fill
-                          className="object-contain p-2"
-                          sizes="(max-width: 768px) 100vw, 384px"
-                        />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
-                        <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 text-xs font-medium text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm z-10 flex items-center gap-1">
-                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
-                          </svg>
-                          Expand
-                        </div>
-                      </div>
+                  {exp.imageUrls.length > 0 && (
+                    <div className="flex gap-3 flex-wrap">
+                      {exp.imageUrls.map((url, i) => (
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, scale: 0.97 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          className="relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex-1 min-w-[200px] max-w-sm"
+                        >
+                          <div
+                            className="relative w-full aspect-[4/3] bg-gray-50 flex items-center justify-center cursor-pointer group"
+                            onClick={() => setModalImage(url)}
+                          >
+                            <Image
+                              src={url}
+                              alt={`${exp.company} documentation ${i + 1}`}
+                              fill
+                              className="object-contain p-2"
+                              sizes="(max-width: 768px) 100vw, 384px"
+                            />
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+                            <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 text-xs font-medium text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm z-10 flex items-center gap-1">
+                              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+                              </svg>
+                              Expand
+                            </div>
+                          </div>
 
-                      {/* Logo company badge — pojok kanan atas */}
-                      {exp.companyLogoUrl && (
-                        <Image
-                          src={exp.companyLogoUrl}
-                          alt={exp.company}
-                          width={56}
-                          height={56}
-                          className="absolute top-2 right-2 object-contain drop-shadow-lg"
-                        />
-                      )}
-                    </motion.div>
+                          {/* Logo company badge hanya di gambar pertama */}
+                          {i === 0 && exp.companyLogoUrl && (
+                            <Image
+                              src={exp.companyLogoUrl}
+                              alt={exp.company}
+                              width={56}
+                              height={56}
+                              className="absolute top-2 right-2 object-contain drop-shadow-lg"
+                            />
+                          )}
+                        </motion.div>
+                      ))}
+                    </div>
                   )}
 
                   {/* Jika tidak ada foto tapi ada logo, tampilkan logo saja */}
-                  {!exp.imageUrl && exp.companyLogoUrl && (
+                  {exp.imageUrls.length === 0 && exp.companyLogoUrl && (
                     <div className="flex items-center gap-3 mt-2">
                       <Image
                         src={exp.companyLogoUrl}

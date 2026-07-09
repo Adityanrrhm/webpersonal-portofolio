@@ -31,10 +31,10 @@ export async function PUT(
     if (body.period_end !== undefined || body.periodEnd !== undefined)
       data.period_end = body.period_end ?? body.periodEnd;
     if (body.points !== undefined) data.points = body.points;
-    if (body.image_url !== undefined) {
-      data.image_url = body.image_url;
-    } else if (body.imageUrl !== undefined) {
-      data.image_url = body.imageUrl;
+    if (body.image_urls !== undefined) {
+      data.image_urls = body.image_urls;
+    } else if (body.imageUrls !== undefined) {
+      data.image_urls = body.imageUrls;
     }
     if (body.company_logo_url !== undefined) {
       data.company_logo_url = body.company_logo_url;
@@ -60,7 +60,7 @@ export async function PUT(
         periodStart: experience.period_start,
         periodEnd: experience.period_end,
         points: experience.points,
-        imageUrl: experience.image_url,
+        imageUrls: (experience.image_urls as string[]) || [],
         companyLogoUrl: experience.company_logo_url,
         sortOrder: experience.sort_order,
         isActive: experience.is_active,
@@ -83,10 +83,10 @@ export async function DELETE(
   const { id } = await params;
 
   try {
-    // Fetch dulu untuk dapat image_url & company_logo_url sebelum dihapus
+    // Fetch dulu untuk dapat image_urls & company_logo_url sebelum dihapus
     const existing = await prisma.experiences.findUnique({
       where: { id: Number(id) },
-      select: { image_url: true, company_logo_url: true },
+      select: { image_urls: true, company_logo_url: true },
     });
 
     // Hapus record dari DB
@@ -94,9 +94,12 @@ export async function DELETE(
 
     // Auto-delete gambar dari UploadThing jika ada
     const keysToDelete: string[] = [];
-    if (existing?.image_url) {
-      const key = extractFileKey(existing.image_url);
-      if (key) keysToDelete.push(key);
+    if (existing?.image_urls) {
+      const urls = existing.image_urls as string[];
+      urls.forEach((url) => {
+        const key = extractFileKey(url);
+        if (key) keysToDelete.push(key);
+      });
     }
     if (existing?.company_logo_url) {
       const key = extractFileKey(existing.company_logo_url);

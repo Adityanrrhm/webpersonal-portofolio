@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       periodStart: e.period_start,
       periodEnd: e.period_end,
       points: e.points,
-      imageUrl: e.image_url,
+      imageUrls: (e.image_urls as string[]) || [],
       companyLogoUrl: e.company_logo_url,
     }));
 

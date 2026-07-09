@@ -16,7 +16,7 @@ interface Experience {
   periodStart: string;
   periodEnd: string | null;
   points: string[];
-  imageUrl: string | File | null;
+  imageUrls: (string | File)[];
   companyLogoUrl: string | File | null;
 }
 
@@ -28,7 +28,7 @@ const empty: Experience = {
   periodStart: "",
   periodEnd: "",
   points: [],
-  imageUrl: null,
+  imageUrls: [],
   companyLogoUrl: null,
 };
 
@@ -37,7 +37,7 @@ export default function AdminExperiences() {
   const [loading, setLoading] = useState(true);
   const [modal, setModal] = useState(false);
   const [editing, setEditing] = useState<Experience>(empty);
-  const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
+  const [originalImageUrls, setOriginalImageUrls] = useState<string[]>([]);
   const [originalLogoUrl, setOriginalLogoUrl] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [activeType, setActiveType] = useState("All");
@@ -55,13 +55,13 @@ export default function AdminExperiences() {
 
   const openCreate = () => {
     setEditing(empty);
-    setOriginalImageUrl(null);
+    setOriginalImageUrls([]);
     setOriginalLogoUrl(null);
     setModal(true);
   };
   const openEdit = (e: Experience) => {
     setEditing(e);
-    setOriginalImageUrl(typeof e.imageUrl === "string" ? e.imageUrl : null);
+    setOriginalImageUrls(e.imageUrls.filter((u): u is string => typeof u === "string"));
     setOriginalLogoUrl(typeof e.companyLogoUrl === "string" ? e.companyLogoUrl : null);
     setModal(true);
   };
@@ -70,19 +70,21 @@ export default function AdminExperiences() {
     e.preventDefault();
     setIsSaving(true);
 
-    let finalImageUrl = typeof editing.imageUrl === "string" ? editing.imageUrl : null;
+    const token = getToken();
+    let finalImageUrls: string[] = [];
     let finalLogoUrl = typeof editing.companyLogoUrl === "string" ? editing.companyLogoUrl : null;
 
     try {
-      const token = getToken();
-
-      // Upload foto dokumentasi jika ada File baru
-      if (editing.imageUrl instanceof File) {
-        const res = await uploadFiles("imageUploader", {
-          files: [editing.imageUrl],
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-        });
-        if (res?.[0]) finalImageUrl = res[0].ufsUrl ?? res[0].url;
+      for (const img of editing.imageUrls) {
+        if (img instanceof File) {
+          const res = await uploadFiles("imageUploader", {
+            files: [img],
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+          });
+          if (res?.[0]) finalImageUrls.push(res[0].ufsUrl ?? res[0].url);
+        } else {
+          finalImageUrls.push(img);
+        }
       }
 
       // Upload logo company jika ada File baru
@@ -101,7 +103,7 @@ export default function AdminExperiences() {
         period_start: editing.periodStart,
         period_end: editing.periodEnd || null,
         points: editing.points,
-        image_url: finalImageUrl,
+        image_urls: finalImageUrls,
         company_logo_url: finalLogoUrl,
       };
 
@@ -113,12 +115,14 @@ export default function AdminExperiences() {
         showToast("Experience created!", "success");
       }
 
-      // Hapus gambar lama dari UploadThing jika berubah
-      if (originalImageUrl && originalImageUrl !== finalImageUrl) {
-        await apiAdmin("uploadthing/delete", {
-          method: "POST",
-          body: JSON.stringify({ url: originalImageUrl }),
-        }).catch((err) => console.error("Failed to delete old image:", err));
+      // Hapus gambar lama dari UploadThing yang tidak dipakai lagi
+      for (const oldUrl of originalImageUrls) {
+        if (oldUrl && !finalImageUrls.includes(oldUrl)) {
+          await apiAdmin("uploadthing/delete", {
+            method: "POST",
+            body: JSON.stringify({ url: oldUrl }),
+          }).catch((err) => console.error("Failed to delete old image:", err));
+        }
       }
       if (originalLogoUrl && originalLogoUrl !== finalLogoUrl) {
         await apiAdmin("uploadthing/delete", {
@@ -287,15 +291,43 @@ export default function AdminExperiences() {
                 <textarea value={editing.points.join("\n")} onChange={e => setEditing(p => ({ ...p, points: e.target.value.split("\n").filter(Boolean) }))} rows={5} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/10" placeholder="Describe responsibilities, one per line" />
               </div>
 
-              {/* Foto Dokumentasi */}
+              {/* Foto Dokumentasi 1 */}
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-1">
-                  Foto Dokumentasi
+                  Dokumentasi 1
                   <span className="text-xs text-gray-400 font-normal ml-1">(opsional)</span>
                 </label>
                 <ImageUpload
-                  value={editing.imageUrl || ""}
-                  onChange={v => setEditing(p => ({ ...p, imageUrl: v }))}
+                  value={editing.imageUrls[0] || ""}
+                  onChange={v => {
+                    const arr = [...editing.imageUrls];
+                    if (v === null) {
+                      arr.splice(0, 1);
+                    } else {
+                      arr[0] = v;
+                    }
+                    setEditing(p => ({ ...p, imageUrls: arr }));
+                  }}
+                />
+              </div>
+
+              {/* Foto Dokumentasi 2 */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 block mb-1">
+                  Dokumentasi 2
+                  <span className="text-xs text-gray-400 font-normal ml-1">(opsional)</span>
+                </label>
+                <ImageUpload
+                  value={editing.imageUrls[1] || ""}
+                  onChange={v => {
+                    const arr = [...editing.imageUrls];
+                    if (v === null) {
+                      arr.splice(1, 1);
+                    } else {
+                      arr[1] = v;
+                    }
+                    setEditing(p => ({ ...p, imageUrls: arr }));
+                  }}
                 />
               </div>
 

@@ -15,7 +15,6 @@ model certificates {
   issued_date    String    @db.VarChar(255)
   description    String?   @db.Text
   image_url      String?   @db.VarChar(255)
-  credential_url String?   @db.VarChar(255)
   sort_order     Int       @default(0)
   is_active      Boolean   @default(true)
   created_at     DateTime? @db.Timestamp(0)
@@ -41,7 +40,7 @@ model experiences {
   period_start     String    @db.VarChar(255)
   period_end       String?   @db.VarChar(255)
   points           Json?
-  image_url        String?   @db.VarChar(255)
+  image_urls       Json?
   company_logo_url String?   @db.VarChar(255)
   sort_order       Int       @default(0)
   is_active        Boolean   @default(true)

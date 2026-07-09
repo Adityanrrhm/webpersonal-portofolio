@@ -4,7 +4,7 @@ import { verifyToken } from "@/lib/auth";
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 1 } })
+  imageUploader: f({ image: { maxFileSize: "4MB", maxFileCount: 2 } })
     .middleware(async ({ req }) => {
       // Verifikasi JWT dari Authorization header atau cookie
       const authHeader = req.headers.get("authorization");
