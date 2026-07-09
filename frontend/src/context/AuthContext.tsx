@@ -35,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
-    const res = await apiAdmin<{ token: string; user: User }>("admin/login", {
+    const res = await apiAdmin<{ token: string; user: User }>("x9k2m/login", {
       method: "POST",
       body: JSON.stringify({ email, password }),
     });
