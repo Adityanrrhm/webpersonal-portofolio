@@ -27,7 +27,7 @@ export default function About() {
   return (
     <section
       id="about"
-      className="section-padding py-20 border-t border-gray-100"
+      className="section-padding py-20 border-t border-gray-100 scroll-mt-24"
     >
       <motion.div
         initial={{ opacity: 0, x: -20 }}
