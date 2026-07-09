@@ -22,6 +22,12 @@
   --font-body: var(--font-body), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
   --font-handwritten: var(--font-caveat), cursive;
+  --animate-shimmer: shimmer 2s infinite ease-in-out;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 

@@ -14,11 +14,14 @@ interface Profile {
 
 export default function Hero() {
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     fetchAPI<{ data: Profile }>("profile")
       .then((res) => setProfile(wrapData(res)))
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -42,24 +45,33 @@ export default function Hero() {
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
             className="w-[280px] h-[360px] md:w-[340px] md:h-[440px] bg-white rounded-3xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.2)] border-[8px] border-white relative overflow-hidden flex items-end cursor-pointer group"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200/50"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200/50" />
 
-            {profile?.photoUrl ? (
+            {loading ? (
+              <div className="absolute inset-0 z-10 overflow-hidden bg-gray-200">
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-shimmer" />
+              </div>
+            ) : profile?.photoUrl ? (
               <Image
                 src={profile.photoUrl}
                 alt={profile.name || "Aditya Nur Rohim"}
                 fill
                 priority
-                className="object-cover object-bottom z-10 scale-105 group-hover:scale-110 transition-transform duration-500"
+                className={`object-cover object-bottom z-10 transition-all duration-500 group-hover:scale-110 ${
+                  imageLoaded ? "opacity-100 scale-105" : "opacity-0 scale-100"
+                }`}
+                onLoad={() => setImageLoaded(true)}
               />
             ) : (
-              <Image
-                src="/assets/fotogw.png"
-                alt="Aditya Nur Rohim"
-                fill
-                priority
-                className="object-cover object-bottom z-10 scale-105 group-hover:scale-110 transition-transform duration-500"
-              />
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-gray-100">
+                <svg
+                  className="w-24 h-24 text-gray-300"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </div>
             )}
           </motion.div>
         </motion.div>
