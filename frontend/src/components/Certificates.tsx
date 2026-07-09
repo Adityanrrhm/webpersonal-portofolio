@@ -13,7 +13,6 @@ interface Certificate {
   org: string;
   category: string;
   issuedDate: string;
-  credentialId: string;
   description: string;
   imageUrl: string | null;
   credentialUrl: string | null;

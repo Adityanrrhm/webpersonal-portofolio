@@ -28,8 +28,6 @@ export async function PUT(
     if (body.category !== undefined) data.category = body.category;
     if (body.issued_date !== undefined || body.issuedDate !== undefined)
       data.issued_date = body.issued_date ?? body.issuedDate;
-    if (body.credential_id !== undefined || body.credentialId !== undefined)
-      data.credential_id = body.credential_id ?? body.credentialId;
     if (body.description !== undefined) data.description = body.description;
     if (body.image_url !== undefined) {
       data.image_url = body.image_url;
@@ -58,7 +56,6 @@ export async function PUT(
         org: certificate.org,
         category: certificate.category,
         issuedDate: certificate.issued_date,
-        credentialId: certificate.credential_id,
         description: certificate.description,
         imageUrl: certificate.image_url,
         credentialUrl: certificate.credential_url,

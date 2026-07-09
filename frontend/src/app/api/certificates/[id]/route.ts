@@ -25,7 +25,6 @@ export async function GET(
       org: certificate.org,
       category: certificate.category,
       issuedDate: certificate.issued_date,
-      credentialId: certificate.credential_id,
       description: certificate.description,
       imageUrl: certificate.image_url,
       credentialUrl: certificate.credential_url,

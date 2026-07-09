@@ -4,7 +4,7 @@ import { getPrisma } from "@/lib/prisma";
 export async function GET(request: NextRequest) {
   const prisma = getPrisma();
 
-  const certificates = await prisma.certificates.findMany({
+    const certificates = await prisma.certificates.findMany({
     orderBy: { sort_order: "asc" },
   });
 
@@ -15,7 +15,6 @@ export async function GET(request: NextRequest) {
       org: c.org,
       category: c.category,
       issuedDate: c.issued_date,
-      credentialId: c.credential_id,
       description: c.description,
       imageUrl: c.image_url,
       credentialUrl: c.credential_url,
@@ -44,7 +43,6 @@ export async function POST(request: NextRequest) {
         org: body.org,
         category: body.category,
         issued_date: body.issued_date,
-        credential_id: body.credential_id ?? body.credentialId ?? null,
         description: body.description ?? null,
         image_url: body.image_url ?? body.imageUrl ?? null,
         credential_url: body.credential_url ?? body.credentialUrl ?? null,
@@ -61,7 +59,6 @@ export async function POST(request: NextRequest) {
           org: certificate.org,
           category: certificate.category,
           issuedDate: certificate.issued_date,
-          credentialId: certificate.credential_id,
           description: certificate.description,
           imageUrl: certificate.image_url,
           credentialUrl: certificate.credential_url,

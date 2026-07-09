@@ -15,7 +15,6 @@ export async function GET(request: NextRequest) {
       org: c.org,
       category: c.category,
       issuedDate: c.issued_date,
-      credentialId: c.credential_id,
       description: c.description,
       imageUrl: c.image_url,
       credentialUrl: c.credential_url,

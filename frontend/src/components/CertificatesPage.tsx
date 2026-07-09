@@ -18,7 +18,6 @@ interface Certificate {
   org: string;
   category: string;
   issuedDate: string;
-  credentialId: string;
   description: string;
   imageUrl: string | null;
   credentialUrl: string | null;
@@ -210,14 +209,6 @@ function CertificateModal({
                 </p>
                 <p className="text-sm text-gray-800 font-medium">
                   {cert.issuedDate}
-                </p>
-              </div>
-              <div>
-                <p className="text-xs text-gray-400 uppercase tracking-wider">
-                  Credential ID
-                </p>
-                <p className="text-sm text-gray-800 font-medium font-mono break-all">
-                  {cert.credentialId}
                 </p>
               </div>
               <div>

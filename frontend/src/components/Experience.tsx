@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { fetchAPI, wrapData } from "@/lib/api";
@@ -25,6 +25,7 @@ export default function Experience({
 }) {
   const [experiences, setExperiences] = useState<Experience[]>([]);
   const [loading, setLoading] = useState(true);
+  const [modalImage, setModalImage] = useState<string | null>(null);
 
   useEffect(() => {
     fetchAPI<{ data: Experience[] }>("experiences")
@@ -34,6 +35,19 @@ export default function Experience({
       })
       .catch(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (!modalImage) return;
+    document.body.style.overflow = "hidden";
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setModalImage(null);
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [modalImage]);
 
   const displayExperiences = isPreview ? experiences.slice(0, 2) : experiences;
 
@@ -128,14 +142,24 @@ export default function Experience({
                       className="relative rounded-2xl overflow-hidden border border-gray-100 shadow-sm w-full max-w-sm"
                     >
                       {/* Foto dokumentasi */}
-                      <div className="relative w-full aspect-[4/3]">
+                      <div
+                        className="relative w-full aspect-[4/3] bg-gray-50 flex items-center justify-center cursor-pointer group"
+                        onClick={() => setModalImage(exp.imageUrl!)}
+                      >
                         <Image
                           src={exp.imageUrl}
                           alt={`${exp.company} documentation`}
                           fill
-                          className="object-cover"
+                          className="object-contain p-2"
                           sizes="(max-width: 768px) 100vw, 384px"
                         />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+                        <div className="absolute bottom-2 right-2 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1.5 text-xs font-medium text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-sm z-10 flex items-center gap-1">
+                          <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" />
+                          </svg>
+                          Expand
+                        </div>
                       </div>
 
                       {/* Logo company badge — pojok kanan atas */}
@@ -176,6 +200,42 @@ export default function Experience({
           ))}
         </div>
       )}
+
+      <AnimatePresence>
+        {modalImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setModalImage(null)}
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 cursor-zoom-out"
+          >
+            <motion.div
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 350, damping: 28 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-5xl max-h-[90vh] flex items-center justify-center cursor-default"
+            >
+              <img
+                src={modalImage}
+                alt="Documentation"
+                className="object-contain w-full h-full max-h-[85vh] rounded-lg"
+              />
+              <button
+                onClick={() => setModalImage(null)}
+                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center hover:bg-white/30 transition-colors"
+              >
+                <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

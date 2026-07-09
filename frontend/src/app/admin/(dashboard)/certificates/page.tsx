@@ -14,13 +14,12 @@ interface Certificate {
   org: string;
   category: string;
   issuedDate: string;
-  credentialId: string | null;
   description: string | null;
   imageUrl: string | File | null;
   credentialUrl: string | null;
 }
 
-const empty: Certificate = { id: 0, title: "", org: "", category: "", issuedDate: "", credentialId: "", description: "", imageUrl: "", credentialUrl: "" };
+const empty: Certificate = { id: 0, title: "", org: "", category: "", issuedDate: "", description: "", imageUrl: "", credentialUrl: "" };
 
 export default function AdminCertificates() {
   const [items, setItems] = useState<Certificate[]>([]);
@@ -62,7 +61,6 @@ export default function AdminCertificates() {
         org: editing.org,
         category: editing.category,
         issued_date: editing.issuedDate,
-        credential_id: editing.credentialId || null,
         description: editing.description || null,
         image_url: finalImageUrl,
         credential_url: editing.credentialUrl || null,
@@ -210,7 +208,6 @@ export default function AdminCertificates() {
                 <Input label="Category" value={editing.category} onChange={v => setEditing(p => ({ ...p, category: v }))} required />
               </div>
               <Input label="Issued Date" type="date" value={editing.issuedDate} onChange={v => setEditing(p => ({ ...p, issuedDate: v }))} required />
-              <Input label="Credential ID" value={editing.credentialId || ""} onChange={v => setEditing(p => ({ ...p, credentialId: v }))} />
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-1">Description</label>
                 <textarea value={editing.description || ""} onChange={e => setEditing(p => ({ ...p, description: e.target.value }))} rows={3} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900/10" />
