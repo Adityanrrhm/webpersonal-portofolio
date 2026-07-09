@@ -93,17 +93,21 @@ export default function Experience({
       </div>
 
       {loading ? (
-        <div className="animate-pulse space-y-8 max-w-4xl">
-          {[1, 2].map((i) => (
-            <div key={i} className="pl-8">
-              <div className="h-6 w-48 bg-gray-200 rounded mb-2" />
-              <div className="h-4 w-32 bg-gray-200 rounded mb-4" />
-              <div className="space-y-2">
-                <div className="h-4 w-full bg-gray-100 rounded" />
-                <div className="h-4 w-3/4 bg-gray-100 rounded" />
+        <div className="animate-pulse space-y-6">
+          <div className="h-4 w-24 bg-gray-200 rounded" />
+          <div className="h-10 w-48 bg-gray-200 rounded" />
+          <div className="space-y-8 mt-10 max-w-4xl">
+            {[1, 2].map((i) => (
+              <div key={i} className="pl-8">
+                <div className="h-6 w-48 bg-gray-200 rounded mb-2" />
+                <div className="h-4 w-32 bg-gray-200 rounded mb-4" />
+                <div className="space-y-2">
+                  <div className="h-4 w-full bg-gray-100 rounded" />
+                  <div className="h-4 w-3/4 bg-gray-100 rounded" />
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       ) : displayExperiences.length === 0 ? (
         <p className="text-gray-400 text-center py-20">No experience yet.</p>

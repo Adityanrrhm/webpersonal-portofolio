@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Download, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI, wrapData } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 interface Profile {
   name: string;
@@ -29,6 +30,19 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const router = useRouter();
+
+  const handleAbout = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    const el = document.getElementById("about");
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" });
+      setIsMobileMenuOpen(false);
+    } else {
+      router.push("/#about");
+    }
+  }, [router]);
 
   return (
     <motion.nav
@@ -73,9 +87,9 @@ export default function Navbar() {
           <Link href="/experience" className="hover:text-foreground transition-colors">
             Experience
           </Link>
-          <Link href="/#about" className="hover:text-foreground transition-colors">
+          <button onClick={handleAbout} className="hover:text-foreground transition-colors cursor-pointer bg-transparent border-none p-0 font-inherit text-inherit">
             About
-          </Link>
+          </button>
         </div>
 
         {/* Desktop Download CV */}
@@ -130,13 +144,12 @@ export default function Navbar() {
             >
               Experience
             </Link>
-            <Link
-              href="/#about"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="text-gray-600 hover:text-gray-900 font-medium py-1.5 text-sm border-b border-gray-50 transition-colors"
+            <button
+              onClick={handleAbout}
+              className="text-gray-600 hover:text-gray-900 font-medium py-1.5 text-sm border-b border-gray-50 transition-colors text-left bg-transparent border-none cursor-pointer w-full"
             >
               About
-            </Link>
+            </button>
             <a
               href={profile?.cvUrl || "#"}
               onClick={() => setIsMobileMenuOpen(false)}
