@@ -85,7 +85,7 @@ export default function Hero() {
           <p className="font-handwritten text-2xl sm:text-4xl md:text-5xl lg:text-7xl text-gray-500 tracking-wide rotate-[-3deg] inline-block mb-2 sm:mb-3">
             hi, i&apos;m
           </p>
-          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[7.5rem] font-bold tracking-tighter leading-[0.85] text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 mb-6 sm:mb-8">
+          <h1 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[7.5rem] font-bold tracking-tighter leading-[0.9] text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900 mb-6 sm:mb-8">
             {profile?.name || "Aditya Nur Rohim"}
           </h1>
 

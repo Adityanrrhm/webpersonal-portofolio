@@ -79,7 +79,7 @@ const CertificateCard = memo(function CertificateCard({
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       whileTap={{ scale: 0.97 }}
       onClick={() => onSelect(cert)}
-      className="shrink-0 w-[320px] sm:w-[360px] h-[460px] sm:h-[480px] rounded-2xl bg-zinc-100 p-3 cursor-pointer will-change-transform group hover:shadow-xl transition-shadow duration-300"
+      className="shrink-0 w-[360px] h-[460px] sm:h-[480px] rounded-2xl bg-zinc-100 p-3 cursor-pointer will-change-transform group hover:shadow-xl transition-shadow duration-300"
     >
       <div className="bg-white rounded-xl h-full flex flex-col overflow-hidden">
         <div className="flex-1 p-4 pb-2 min-h-0">
@@ -354,9 +354,6 @@ export default function CertificatesPage() {
       </div>
 
       <div className="relative select-none">
-        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-
         <motion.div
           className="flex items-center"
           drag="x"
