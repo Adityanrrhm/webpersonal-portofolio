@@ -97,7 +97,7 @@ export default function About() {
 
           <div className="w-12 h-px bg-gray-200 my-6" />
 
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             {[
               { label: "Location", value: profile?.location || "Indonesia" },
               { label: "Focus", value: profile?.focus || "Data & Cloud" },
