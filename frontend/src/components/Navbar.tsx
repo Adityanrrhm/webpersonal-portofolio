@@ -49,8 +49,8 @@ export default function Navbar() {
         }}
         className={`bg-background/80 backdrop-blur-md border-card-border flex items-center justify-between shadow-sm relative z-50 ${
           isScrolled
-            ? "w-full max-w-none rounded-none border-b px-8 py-4"
-            : "mx-6 w-full max-w-5xl rounded-full border px-6 py-3"
+              ? "w-full max-w-none rounded-none border-b px-8 py-4"
+              : "w-[calc(100%-3rem)] max-w-5xl mx-auto rounded-full border px-6 py-3"
         }`}
       >
         <Link href="/" className="flex items-center gap-2 font-bold text-lg tracking-tight group">
