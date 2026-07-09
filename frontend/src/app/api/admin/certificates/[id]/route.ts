@@ -34,11 +34,6 @@ export async function PUT(
     } else if (body.imageUrl !== undefined) {
       data.image_url = body.imageUrl;
     }
-    if (body.credential_url !== undefined) {
-      data.credential_url = body.credential_url;
-    } else if (body.credentialUrl !== undefined) {
-      data.credential_url = body.credentialUrl;
-    }
     if (body.sort_order !== undefined || body.sortOrder !== undefined)
       data.sort_order = body.sort_order ?? body.sortOrder;
     if (body.is_active !== undefined || body.isActive !== undefined)
@@ -58,7 +53,6 @@ export async function PUT(
         issuedDate: certificate.issued_date,
         description: certificate.description,
         imageUrl: certificate.image_url,
-        credentialUrl: certificate.credential_url,
         sortOrder: certificate.sort_order,
         isActive: certificate.is_active,
       },

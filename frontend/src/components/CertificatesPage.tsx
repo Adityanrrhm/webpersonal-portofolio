@@ -20,7 +20,6 @@ interface Certificate {
   issuedDate: string;
   description: string;
   imageUrl: string | null;
-  credentialUrl: string | null;
 }
 
 const CARD_W = 360;
@@ -221,15 +220,6 @@ function CertificateModal({
               </div>
             </div>
 
-            <a
-              href={cert.credentialUrl || "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded-full text-sm font-medium hover:opacity-90 transition-all active:scale-[0.97] cursor-pointer w-fit"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Verify Credential
-            </a>
           </div>
         </div>
       </motion.div>

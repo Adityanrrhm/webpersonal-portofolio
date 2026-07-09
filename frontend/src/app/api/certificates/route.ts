@@ -17,7 +17,6 @@ export async function GET(request: NextRequest) {
       issuedDate: c.issued_date,
       description: c.description,
       imageUrl: c.image_url,
-      credentialUrl: c.credential_url,
     }));
 
     return NextResponse.json({ data });

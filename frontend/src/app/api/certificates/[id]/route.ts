@@ -27,7 +27,6 @@ export async function GET(
       issuedDate: certificate.issued_date,
       description: certificate.description,
       imageUrl: certificate.image_url,
-      credentialUrl: certificate.credential_url,
     };
 
     return NextResponse.json({ data });

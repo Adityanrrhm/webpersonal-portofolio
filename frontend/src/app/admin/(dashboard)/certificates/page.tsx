@@ -16,10 +16,9 @@ interface Certificate {
   issuedDate: string;
   description: string | null;
   imageUrl: string | File | null;
-  credentialUrl: string | null;
 }
 
-const empty: Certificate = { id: 0, title: "", org: "", category: "", issuedDate: "", description: "", imageUrl: "", credentialUrl: "" };
+const empty: Certificate = { id: 0, title: "", org: "", category: "", issuedDate: "", description: "", imageUrl: "" };
 
 export default function AdminCertificates() {
   const [items, setItems] = useState<Certificate[]>([]);
@@ -63,7 +62,6 @@ export default function AdminCertificates() {
         issued_date: editing.issuedDate,
         description: editing.description || null,
         image_url: finalImageUrl,
-        credential_url: editing.credentialUrl || null,
       };
       if (editing.id) {
         await apiAdmin(`admin/certificates/${editing.id}`, { method: "PUT", body: JSON.stringify(body) });
@@ -216,7 +214,6 @@ export default function AdminCertificates() {
                 <label className="text-sm font-medium text-gray-700 block mb-1">Image</label>
                 <ImageUpload value={editing.imageUrl || ""} onChange={v => setEditing(p => ({ ...p, imageUrl: v }))} />
               </div>
-              <Input label="Credential URL" type="text" value={editing.credentialUrl || ""} onChange={v => setEditing(p => ({ ...p, credentialUrl: v }))} />
             </div>
             <div className="flex justify-end gap-3 mt-6 pt-4 border-t">
               <button type="button" onClick={() => setModal(false)} disabled={isSaving} className="px-4 py-2 rounded-lg text-sm border border-gray-200 hover:bg-gray-50 transition-all active:scale-[0.97] disabled:opacity-50">Cancel</button>

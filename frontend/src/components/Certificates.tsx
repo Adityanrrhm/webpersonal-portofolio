@@ -15,7 +15,6 @@ interface Certificate {
   issuedDate: string;
   description: string;
   imageUrl: string | null;
-  credentialUrl: string | null;
 }
 
 const PREVIEW_COUNT = 6;
@@ -305,15 +304,6 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
                     <ZoomIn className="w-3.5 h-3.5" />
                     {zoomed ? "Reset" : "Zoom"}
                   </button>
-                  <a
-                    href={modalCert.credentialUrl || "#"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-all active:scale-[0.97] cursor-pointer px-3 py-2 rounded-lg hover:bg-gray-50"
-                  >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                    View
-                  </a>
                 </div>
               </div>
 
