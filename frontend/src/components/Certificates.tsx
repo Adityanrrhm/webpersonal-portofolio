@@ -147,16 +147,16 @@ function CardStack({
                   : "0 2px 8px rgba(0,0,0,0.03)",
             }}
           >
-            <div className="h-[340px] bg-gradient-to-b from-[#fcf9f5] to-[#f8f3ec] flex items-center justify-center p-5 overflow-hidden">
+            <div className="h-[340px] bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center p-5 overflow-hidden">
               {cert.imageUrl ? (
                 <Img src={cert.imageUrl} alt={cert.title} containerClassName="w-full h-full rounded-[8px]" imgClassName="w-full h-full object-contain" />
               ) : (
                 <div className="w-full h-full rounded-[8px] bg-white flex flex-col items-center justify-center p-5">
                   <div className="w-full max-w-[140px] flex flex-col items-center gap-2.5">
-                    <div className="w-full h-px bg-[#e5ddd2]" />
-                    <p className="text-[10px] font-bold text-[#3d3730] text-center leading-snug">{cert.title}</p>
-                    <div className="w-8 h-px bg-[#e5ddd2]" />
-                    <p className="text-[8px] text-[#9e9280] text-center">{cert.org}</p>
+                    <div className="w-full h-px bg-gray-200" />
+                    <p className="text-[10px] font-bold text-gray-800 text-center leading-snug">{cert.title}</p>
+                    <div className="w-8 h-px bg-gray-200" />
+                    <p className="text-[8px] text-gray-500 text-center">{cert.org}</p>
                   </div>
                 </div>
               )}
@@ -216,7 +216,7 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
         <div>
           <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-            CERTIFICATIONS
+            (IV) CERTIFICATIONS
           </p>
           <h2 className="font-heading text-4xl md:text-5xl font-bold">Certificates.</h2>
         </div>
@@ -272,17 +272,17 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
               onClick={(e) => e.stopPropagation()}
               className="bg-white rounded-2xl overflow-hidden shadow-2xl relative flex flex-col w-full max-w-lg max-h-[90vh]"
             >
-              <div className="flex-1 bg-gradient-to-b from-[#fcf9f5] to-[#f8f3ec] flex items-center justify-center p-8 min-h-0 overflow-hidden">
+              <div className="flex-1 bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center p-8 min-h-0 overflow-hidden">
                 {modalCert.imageUrl ? (
                   <Img src={modalCert.imageUrl} alt={modalCert.title} containerClassName="w-full h-full rounded-[10px]" imgClassName="w-full h-full object-contain" />
                 ) : (
                   <div className="w-full h-full max-h-full rounded-[10px] bg-white flex flex-col items-center justify-center p-8">
                     <div className="max-w-[240px] flex flex-col items-center gap-3">
-                      <div className="w-12 h-px bg-[#e5ddd2]" />
-                      <p className="text-lg font-bold text-[#3d3730] text-center leading-snug">{modalCert.title}</p>
-                      <div className="w-8 h-px bg-[#e5ddd2]" />
-                      <p className="text-sm text-[#9e9280] text-center">{modalCert.org}</p>
-                      <p className="text-xs text-[#b8ad9e]">{formatDate(modalCert.issuedDate)}</p>
+                      <div className="w-12 h-px bg-gray-200" />
+                      <p className="text-lg font-bold text-gray-800 text-center leading-snug">{modalCert.title}</p>
+                      <div className="w-8 h-px bg-gray-200" />
+                      <p className="text-sm text-gray-500 text-center">{modalCert.org}</p>
+                      <p className="text-xs text-gray-400">{formatDate(modalCert.issuedDate)}</p>
                     </div>
                   </div>
                 )}

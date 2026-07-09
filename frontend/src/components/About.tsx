@@ -36,7 +36,7 @@ export default function About() {
         className="mb-12"
       >
         <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-          (03) ABOUT ME
+          (II) ABOUT ME
         </p>
         <h2 className="font-heading text-4xl md:text-5xl font-bold">
           About me.

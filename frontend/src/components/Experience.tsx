@@ -60,12 +60,19 @@ export default function Experience({
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
         >
-          <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-            (04) WORK HISTORY
-          </p>
+          {isPreview && (
+            <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
+              (III) EXPERIENCE
+            </p>
+          )}
           <h2 className="font-heading text-4xl md:text-5xl font-bold">
             Experience.
           </h2>
+          {!isPreview && (
+            <p className="text-gray-400 mt-2">
+              Where I've worked and what I've learned.
+            </p>
+          )}
         </motion.div>
 
         <motion.div
