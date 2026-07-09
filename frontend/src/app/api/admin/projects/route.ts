@@ -4,7 +4,7 @@ import { getPrisma } from "@/lib/prisma";
 export async function GET(request: NextRequest) {
   const prisma = getPrisma();
 
-  const projects = await prisma.projects.findMany({ orderBy: { sort_order: "asc" } });
+  const projects = await prisma.projects.findMany({ orderBy: { created_at: "desc" } });
 
   return NextResponse.json({
     data: projects.map((p) => ({

@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const experiences = await prisma.experiences.findMany({
       where: { is_active: true },
-      orderBy: { sort_order: "asc" },
+      orderBy: { period_start: "desc" },
     });
 
     const data = experiences.map((e) => ({

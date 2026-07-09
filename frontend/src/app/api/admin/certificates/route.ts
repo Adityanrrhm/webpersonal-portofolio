@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const prisma = getPrisma();
 
     const certificates = await prisma.certificates.findMany({
-    orderBy: { sort_order: "asc" },
+    orderBy: { issued_date: "desc" },
   });
 
   return NextResponse.json({

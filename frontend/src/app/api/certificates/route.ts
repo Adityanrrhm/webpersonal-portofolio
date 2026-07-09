@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const certificates = await prisma.certificates.findMany({
       where: { is_active: true },
-      orderBy: { sort_order: "asc" },
+      orderBy: { issued_date: "desc" },
     });
 
     const data = certificates.map((c) => ({

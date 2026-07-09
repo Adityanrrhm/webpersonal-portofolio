@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ZoomIn, ExternalLink, X } from "lucide-react";
 import Img from "@/components/Img";
 import { fetchAPI, wrapData } from "@/lib/api";
+import { formatDate } from "@/lib/formatDate";
 
 interface Certificate {
   id: number;
@@ -165,7 +166,7 @@ function CardStack({
                 {cert.title}
               </h3>
               <p className="text-[11px] text-gray-500 mt-0.5">{cert.org}</p>
-              <p className="text-[10px] text-gray-400 mt-0.5">{cert.issuedDate}</p>
+              <p className="text-[10px] text-gray-400 mt-0.5">{formatDate(cert.issuedDate)}</p>
             </div>
           </motion.div>
         );
@@ -281,7 +282,7 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
                       <p className="text-lg font-bold text-[#3d3730] text-center leading-snug">{modalCert.title}</p>
                       <div className="w-8 h-px bg-[#e5ddd2]" />
                       <p className="text-sm text-[#9e9280] text-center">{modalCert.org}</p>
-                      <p className="text-xs text-[#b8ad9e]">{modalCert.issuedDate}</p>
+                      <p className="text-xs text-[#b8ad9e]">{formatDate(modalCert.issuedDate)}</p>
                     </div>
                   </div>
                 )}
@@ -293,7 +294,7 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
                     {modalCert.title}
                   </h3>
                   <p className="text-xs text-gray-500">
-                    {modalCert.org} &bull; {modalCert.issuedDate}
+                    {modalCert.org} &bull; {formatDate(modalCert.issuedDate)}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">

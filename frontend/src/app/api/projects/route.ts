@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const projects = await prisma.projects.findMany({
       where: { is_active: true },
-      orderBy: { sort_order: "asc" },
+      orderBy: { created_at: "desc" },
     });
 
     const data = projects.map((p) => ({

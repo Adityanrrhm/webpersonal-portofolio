@@ -11,6 +11,7 @@ import {
 import { ChevronLeft, ChevronRight, X, ExternalLink } from "lucide-react";
 import Img from "@/components/Img";
 import { fetchAPI, wrapData } from "@/lib/api";
+import { formatDate } from "@/lib/formatDate";
 
 interface Certificate {
   id: number;
@@ -81,7 +82,7 @@ const CertificateCard = memo(function CertificateCard({
       className="shrink-0 w-[320px] sm:w-[360px] h-[460px] sm:h-[480px] rounded-2xl bg-zinc-100 p-3 cursor-pointer will-change-transform group hover:shadow-xl transition-shadow duration-300"
     >
       <div className="bg-white rounded-xl h-full flex flex-col overflow-hidden">
-        <div className="flex-1 p-4 pb-2">
+        <div className="flex-1 p-4 pb-2 min-h-0">
           <div className="rounded-lg h-full bg-gradient-to-br from-gray-50 to-gray-100 shadow-sm flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-[1.03]">
             {cert.imageUrl ? (
               <Img src={cert.imageUrl} alt={cert.title} containerClassName="w-full h-full" imgClassName="w-full h-full object-contain" />
@@ -111,7 +112,7 @@ const CertificateCard = memo(function CertificateCard({
               {cert.category}
             </span>
             <span className="text-[11px] text-gray-400">
-              {cert.issuedDate}
+              {formatDate(cert.issuedDate)}
             </span>
           </div>
         </div>
@@ -180,7 +181,7 @@ function CertificateModal({
                     <h3 className="text-base font-bold text-gray-800">{cert.title}</h3>
                     <div className="w-10 h-px bg-gray-200 mx-auto my-3" />
                     <p className="text-sm text-gray-500">{cert.org}</p>
-                    <p className="text-xs text-gray-400 mt-2">{cert.issuedDate}</p>
+                    <p className="text-xs text-gray-400 mt-2">{formatDate(cert.issuedDate)}</p>
                   </div>
                 </div>
               </div>
@@ -207,7 +208,7 @@ function CertificateModal({
                   Issued
                 </p>
                 <p className="text-sm text-gray-800 font-medium">
-                  {cert.issuedDate}
+                  {formatDate(cert.issuedDate)}
                 </p>
               </div>
               <div>

@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   const prisma = getPrisma();
 
   const experiences = await prisma.experiences.findMany({
-    orderBy: { sort_order: "asc" },
+    orderBy: { period_start: "desc" },
   });
 
   return NextResponse.json({
