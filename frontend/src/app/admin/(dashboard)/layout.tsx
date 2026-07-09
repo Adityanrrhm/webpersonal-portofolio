@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/admin/login");
+      router.push("/gateway");
     }
   }, [user, loading, router]);
 

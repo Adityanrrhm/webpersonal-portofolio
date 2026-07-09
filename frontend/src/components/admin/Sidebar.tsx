@@ -39,7 +39,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const handleLogout = async () => {
     await logout();
-    router.push("/admin/login");
+    router.push("/gateway");
   };
 
   return (
