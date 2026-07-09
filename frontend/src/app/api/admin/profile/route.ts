@@ -1,11 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPrisma } from "@/lib/prisma";
+import { verifyAuth, verifyPassword, hashPassword } from "@/lib/auth";
 
 export async function PUT(request: NextRequest) {
   const prisma = getPrisma();
 
   try {
     const body = await request.json();
+    const user = await verifyAuth(request);
+
+    if (body.current_password || body.password) {
+      if (!user) {
+        return NextResponse.json(
+          { message: "Unauthorized" },
+          { status: 401 }
+        );
+      }
+      if (!body.current_password || !body.password) {
+        return NextResponse.json(
+          { message: "Current password and new password are required" },
+          { status: 400 }
+        );
+      }
+      if (!verifyPassword(body.current_password, user.password)) {
+        return NextResponse.json(
+          { message: "Current password is incorrect" },
+          { status: 422 }
+        );
+      }
+      await prisma.users.update({
+        where: { id: user.id },
+        data: { password: hashPassword(body.password) },
+      });
+      return NextResponse.json({ message: "Password updated" });
+    }
+
     const data: Record<string, unknown> = {};
 
     if (body.name !== undefined) data.name = body.name;

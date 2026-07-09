@@ -4,7 +4,7 @@ import { useState, useEffect, type FormEvent } from "react";
 import { apiAdmin, getToken } from "@/lib/apiAdmin";
 import { uploadFiles } from "@/lib/uploadthing";
 import ImageUpload from "@/components/admin/ImageUpload";
-import { Save, Loader2 } from "lucide-react";
+import { Save, Lock, Loader2 } from "lucide-react";
 import { useToast, Toast } from "@/components/admin/Toast";
 
 interface Profile {
@@ -25,6 +25,12 @@ export default function AdminProfile() {
   const [saving, setSaving] = useState(false);
   const [originalPhotoUrl, setOriginalPhotoUrl] = useState<string | null>(null);
   const { toast, showToast, dismissToast } = useToast();
+
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [pwBusy, setPwBusy] = useState(false);
+  const [pwError, setPwError] = useState("");
 
   useEffect(() => {
     apiAdmin<{ data: Profile }>("profile")
@@ -60,13 +66,12 @@ export default function AdminProfile() {
         body: JSON.stringify(body),
       });
 
-      // Hapus gambar lama jika ada dan berubah
       if (originalPhotoUrl && originalPhotoUrl !== finalPhotoUrl) {
         await apiAdmin("uploadthing/delete", {
           method: "POST",
           body: JSON.stringify({ url: originalPhotoUrl }),
         }).catch(err => console.error("Failed to delete old image:", err));
-        setOriginalPhotoUrl(finalPhotoUrl); // Update original to new saved one
+        setOriginalPhotoUrl(finalPhotoUrl);
       }
 
       showToast("Profile updated!", "success");
@@ -77,16 +82,52 @@ export default function AdminProfile() {
     }
   };
 
+  const updatePassword = async (e: FormEvent) => {
+    e.preventDefault();
+    setPwError("");
+
+    if (!currentPassword || !newPassword) {
+      setPwError("All fields are required");
+      return;
+    }
+    if (newPassword.length < 6) {
+      setPwError("New password must be at least 6 characters");
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPwError("Passwords do not match");
+      return;
+    }
+
+    setPwBusy(true);
+    try {
+      await apiAdmin("admin/profile", {
+        method: "PUT",
+        body: JSON.stringify({
+          current_password: currentPassword,
+          password: newPassword,
+        }),
+      });
+      showToast("Password updated!", "success");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err: any) {
+      setPwError(err.message || "Failed to update password");
+    } finally {
+      setPwBusy(false);
+    }
+  };
+
   if (loading) return <div className="animate-pulse space-y-6">{Array(6).fill(0).map((_, i) => <div key={i} className="h-12 bg-gray-200 rounded-lg" />)}</div>;
   if (!profile) return <p className="text-gray-400">Profile not found.</p>;
 
   const update = (key: keyof Profile, value: any) => setProfile(p => p ? { ...p, [key]: value } : p);
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-6">
+    <div className="space-y-8">
+      <div className="flex items-center justify-between">
         <h1 className="font-heading text-2xl font-bold">Edit Profile</h1>
-
       </div>
 
       <form onSubmit={save} className="bg-white rounded-xl border shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-6 max-w-2xl space-y-5">
@@ -124,6 +165,31 @@ export default function AdminProfile() {
           </button>
         </div>
       </form>
+
+      <form onSubmit={updatePassword} className="bg-white rounded-xl border shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-6 max-w-2xl space-y-5">
+        <div className="flex items-center gap-2 mb-1">
+          <Lock className="w-5 h-5 text-gray-700" />
+          <h2 className="font-heading text-lg font-semibold">Change Password</h2>
+        </div>
+
+        {pwError && (
+          <p className="text-sm text-red-600 bg-red-50 border border-red-100 rounded-lg px-4 py-2">
+            {pwError}
+          </p>
+        )}
+
+        <Input label="Current Password" type="password" value={currentPassword} onChange={setCurrentPassword} placeholder="Enter current password" />
+        <Input label="New Password" type="password" value={newPassword} onChange={setNewPassword} placeholder="Min. 6 characters" />
+        <Input label="Confirm New Password" type="password" value={confirmPassword} onChange={setConfirmPassword} placeholder="Re-enter new password" />
+
+        <div className="pt-2">
+          <button type="submit" disabled={pwBusy} className="flex items-center gap-2 bg-zinc-900 text-white px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-zinc-800 transition-all active:scale-[0.97] disabled:opacity-70">
+            {pwBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
+            {pwBusy ? "Updating..." : "Update Password"}
+          </button>
+        </div>
+      </form>
+
       <Toast toast={toast} onDismiss={dismissToast} />
     </div>
   );
