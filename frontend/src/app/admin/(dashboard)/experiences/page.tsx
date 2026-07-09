@@ -283,8 +283,8 @@ export default function AdminExperiences() {
                 <Input label="Type" value={editing.type} onChange={v => setEditing(p => ({ ...p, type: v }))} required placeholder="Full-time, Internship, etc" />
               </div>
               <div className="grid grid-cols-2 gap-4">
-                <Input label="Period Start" value={editing.periodStart} onChange={v => setEditing(p => ({ ...p, periodStart: v }))} required placeholder="e.g. Jan 2024" />
-                <Input label="Period End" value={editing.periodEnd || ""} onChange={v => setEditing(p => ({ ...p, periodEnd: v }))} placeholder="e.g. Dec 2024 (or leave blank)" />
+                <Input label="Period Start" type="month" value={editing.periodStart} onChange={v => setEditing(p => ({ ...p, periodStart: v }))} required />
+                <Input label="Period End" type="month" value={editing.periodEnd || ""} onChange={v => setEditing(p => ({ ...p, periodEnd: v }))} />
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700 block mb-1">Points (one per line)</label>

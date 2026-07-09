@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { fetchAPI, wrapData } from "@/lib/api";
+import { formatPeriod } from "@/lib/formatDate";
 
 interface Experience {
   id: number;
@@ -196,8 +197,8 @@ export default function Experience({
 
                 {/* Period — kanan */}
                 <div className="md:col-span-4 mt-4 md:mt-0 text-gray-400 text-sm md:text-right font-medium">
-                  {exp.periodStart}
-                  {exp.periodEnd ? ` — ${exp.periodEnd}` : " — Present"}
+                  {formatPeriod(exp.periodStart)}
+                  {exp.periodEnd ? ` — ${formatPeriod(exp.periodEnd)}` : " — Present"}
                 </div>
               </div>
             </motion.div>

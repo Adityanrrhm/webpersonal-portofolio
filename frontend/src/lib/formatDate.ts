@@ -6,3 +6,18 @@ export function formatDate(dateStr: string): string {
   }
   return dateStr;
 }
+
+const MONTHS = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December",
+];
+
+export function formatPeriod(period: string | null): string {
+  if (!period) return "";
+  const match = period.match(/^(\d{4})-(\d{2})$/);
+  if (match) {
+    const m = parseInt(match[2]) - 1;
+    return `${MONTHS[m]} ${match[1]}`;
+  }
+  return period;
+}
