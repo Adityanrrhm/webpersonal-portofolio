@@ -217,7 +217,13 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
         <p className="text-gray-400 text-center py-20">No projects yet.</p>
       ) : (
         <>
-          <div className="overflow-hidden w-full py-8">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="overflow-hidden w-full py-8"
+          >
             <motion.div
               className="flex items-center"
               drag="x"
@@ -242,7 +248,7 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
                 />
               ))}
             </motion.div>
-          </div>
+          </motion.div>
 
           <div className="flex justify-center items-center gap-6 mt-10">
             <button

@@ -272,12 +272,17 @@ export default function ProjectsPage() {
 
   return (
     <section className="section-padding py-20">
-      <div className="mb-2">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="mb-2"
+      >
         <h2 className="font-heading text-4xl md:text-5xl font-bold">Projects.</h2>
         <p className="text-gray-400 mt-2">
           A curated collection of projects I've built.
         </p>
-      </div>
+      </motion.div>
 
       <div className="flex flex-wrap gap-2 mb-10 mt-8">
         {labels.map((label) => {

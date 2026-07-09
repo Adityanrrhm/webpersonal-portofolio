@@ -34,7 +34,13 @@ export default function Skills() {
     <section className="flex flex-col items-center pt-8 pb-32 overflow-hidden bg-background relative">
       <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[800px] h-[150px] bg-gradient-to-r from-blue-100 via-purple-50 to-teal-50 blur-3xl opacity-60 pointer-events-none"></div>
 
-      <div className="relative flex overflow-hidden whitespace-nowrap w-full py-12 mb-20">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="relative flex overflow-hidden whitespace-nowrap w-full py-12 mb-20"
+      >
         <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"></div>
         <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"></div>
 
@@ -65,7 +71,7 @@ export default function Skills() {
             })}
           </motion.div>
         )}
-      </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}

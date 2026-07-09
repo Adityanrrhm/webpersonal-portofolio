@@ -214,12 +214,16 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
   return (
     <section className="section-padding py-20 border-t border-gray-100 overflow-hidden">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+        >
           <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
             (IV) CERTIFICATIONS
           </p>
           <h2 className="font-heading text-4xl md:text-5xl font-bold">Certificates.</h2>
-        </div>
+        </motion.div>
         {isPreview && (
           <Link
             href="/certificate"

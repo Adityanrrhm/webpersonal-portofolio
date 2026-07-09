@@ -15,7 +15,7 @@ interface Profile {
   study: string;
 }
 
-export default function About() {
+export default function About({ isPreview = false }: { isPreview?: boolean }) {
   const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
@@ -35,12 +35,19 @@ export default function About() {
         viewport={{ once: true }}
         className="mb-12"
       >
-        <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-          (II) ABOUT ME
-        </p>
+        {isPreview && (
+          <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
+            (II) ABOUT ME
+          </p>
+        )}
         <h2 className="font-heading text-4xl md:text-5xl font-bold">
           About me.
         </h2>
+        {!isPreview && (
+          <p className="text-gray-400 mt-2">
+            Learn more about my background and expertise.
+          </p>
+        )}
       </motion.div>
 
       <div className="grid md:grid-cols-12 gap-12 items-center">

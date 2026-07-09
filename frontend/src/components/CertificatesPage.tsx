@@ -319,12 +319,17 @@ export default function CertificatesPage() {
 
   return (
     <section className="section-padding py-20 overflow-hidden">
-      <div className="mb-2">
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        className="mb-2"
+      >
         <h2 className="font-heading text-4xl md:text-5xl font-bold">Certificates.</h2>
         <p className="text-gray-400 mt-2">
           Certificates that prove the grind.
         </p>
-      </div>
+      </motion.div>
 
       <div className="flex flex-wrap gap-2 mb-12 mt-8">
         {categories.map((cat) => {

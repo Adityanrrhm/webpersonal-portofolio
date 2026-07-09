@@ -18,7 +18,7 @@ export default function Home() {
         <Skills />
         <Portfolio isPreview={true} />
         <Certificates isPreview={true} />
-        <About />
+        <About isPreview={true} />
         <Experience isPreview={true} />
         <CTA />
       </div>
