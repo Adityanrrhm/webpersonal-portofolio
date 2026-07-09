@@ -24,6 +24,7 @@ const columns = [
     title: "Navigation",
     links: [
       { label: "Home", href: "/" },
+      { label: "About", href: "/about" },
       { label: "Project", href: "/project" },
       { label: "Certificates", href: "/certificate" },
       { label: "Experience", href: "/experience" },

@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Download, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI, wrapData } from "@/lib/api";
-
 
 interface Profile {
   name: string;
@@ -29,17 +28,6 @@ export default function Navbar() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const handleAbout = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    const el = document.getElementById("about");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-      setIsMobileMenuOpen(false);
-    } else {
-      window.location.href = "/#about";
-    }
   }, []);
 
   return (
@@ -85,9 +73,9 @@ export default function Navbar() {
           <Link href="/experience" className="hover:text-foreground transition-colors">
             Experience
           </Link>
-          <button onClick={handleAbout} className="hover:text-foreground transition-colors cursor-pointer bg-transparent border-none p-0 font-inherit text-inherit">
+          <Link href="/about" className="hover:text-foreground transition-colors">
             About
-          </button>
+          </Link>
         </div>
 
         {/* Desktop Download CV */}
@@ -142,12 +130,13 @@ export default function Navbar() {
             >
               Experience
             </Link>
-            <button
-              onClick={handleAbout}
-              className="text-gray-600 hover:text-gray-900 font-medium py-1.5 text-sm border-b border-gray-50 transition-colors text-left bg-transparent border-none cursor-pointer w-full"
+            <Link
+              href="/about"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-gray-600 hover:text-gray-900 font-medium py-1.5 text-sm border-b border-gray-50 transition-colors"
             >
               About
-            </button>
+            </Link>
             <a
               href={profile?.cvUrl || "#"}
               onClick={() => setIsMobileMenuOpen(false)}
