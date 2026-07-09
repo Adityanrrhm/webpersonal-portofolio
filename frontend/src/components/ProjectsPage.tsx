@@ -144,7 +144,7 @@ function ProjectModal({
         </button>
 
         <div
-          className={`md:w-[60%] ${project.imageUrl ? "bg-gray-50" : "bg-gradient-to-br " + (LABEL_COLORS[project.label] || "from-gray-50 to-gray-100")} p-0 flex items-center justify-center min-h-[220px] md:min-h-[400px] overflow-hidden`}
+          className={`md:w-[60%] ${project.imageUrl ? "bg-gray-50" : "bg-gradient-to-br " + (LABEL_COLORS[project.label] || "from-gray-50 to-gray-100")} p-0 flex items-center justify-center h-[40vh] min-h-[220px] md:h-auto md:min-h-[400px] overflow-hidden`}
         >
           {project.imageUrl ? (
             <Img src={project.imageUrl} alt={project.title} containerClassName="w-full h-full" imgClassName="w-full h-full object-contain" />
@@ -273,12 +273,9 @@ export default function ProjectsPage() {
   return (
     <section className="section-padding py-20">
       <div className="mb-2">
-        <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-          PORTFOLIO
-        </p>
         <h2 className="font-heading text-4xl md:text-5xl font-bold">Projects.</h2>
         <p className="text-gray-400 mt-2">
-          Selected work across data, cloud, and product.
+          A curated collection of projects I've built.
         </p>
       </div>
 

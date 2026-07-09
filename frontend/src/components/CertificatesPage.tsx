@@ -158,7 +158,7 @@ function CertificateModal({
         exit={{ scale: 0.92, opacity: 0, y: 20 }}
         transition={{ type: "spring", stiffness: 350, damping: 28 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-2xl overflow-hidden shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row relative"
+        className="bg-white rounded-2xl overflow-y-auto md:overflow-hidden shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col md:flex-row relative"
       >
         <button
           onClick={onClose}
@@ -167,7 +167,7 @@ function CertificateModal({
           <X className="w-4 h-4 text-gray-500" />
         </button>
 
-        <div className="md:w-1/2 bg-gradient-to-br from-gray-50 to-gray-100 p-0 md:p-0 flex items-center justify-center min-h-[220px] md:min-h-[400px] overflow-hidden">
+        <div className="md:w-1/2 bg-gradient-to-br from-gray-50 to-gray-100 p-0 md:p-0 flex items-center justify-center h-[40vh] min-h-[220px] md:h-auto md:min-h-[400px] overflow-hidden">
           {cert.imageUrl ? (
             <Img src={cert.imageUrl} alt={cert.title} containerClassName="w-full h-full" imgClassName="w-full h-full object-contain" />
           ) : (
@@ -320,12 +320,9 @@ export default function CertificatesPage() {
   return (
     <section className="section-padding py-20 overflow-hidden">
       <div className="mb-2">
-        <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-          CERTIFICATIONS
-        </p>
         <h2 className="font-heading text-4xl md:text-5xl font-bold">Certificates.</h2>
         <p className="text-gray-400 mt-2">
-          Verified achievements from continuous learning.
+          Certificates that prove the grind.
         </p>
       </div>
 
