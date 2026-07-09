@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Download, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { fetchAPI, wrapData } from "@/lib/api";
-import { useRouter } from "next/navigation";
+
 
 interface Profile {
   name: string;
@@ -31,8 +31,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const router = useRouter();
-
   const handleAbout = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     const el = document.getElementById("about");
@@ -40,9 +38,9 @@ export default function Navbar() {
       el.scrollIntoView({ behavior: "smooth" });
       setIsMobileMenuOpen(false);
     } else {
-      router.push("/#about");
+      window.location.href = "/#about";
     }
-  }, [router]);
+  }, []);
 
   return (
     <motion.nav
