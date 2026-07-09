@@ -24,7 +24,7 @@ const columns = [
     title: "Navigation",
     links: [
       { label: "Home", href: "/" },
-      { label: "Projects", href: "/projects" },
+      { label: "Project", href: "/project" },
       { label: "Certificates", href: "/certificate" },
       { label: "Experience", href: "/experience" },
     ],
@@ -78,7 +78,7 @@ export default function Footer() {
 
             <p className="text-md text-gray-500 leading-relaxed mt-6 max-w-[380px]">
               {profile?.bio ||
-                "A Computer Science student passionate about Data Analytics and Cloud Computing, transforming data into actionable insights through modern cloud-based solutions."}
+                "I help businesses make sense of their data — from cleaning messy datasets to building cloud infrastructure that scales."}
             </p>
           </div>
 

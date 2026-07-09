@@ -64,8 +64,8 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-muted">
-          <Link href="/projects" className="hover:text-foreground transition-colors">
-            Projects
+          <Link href="/project" className="hover:text-foreground transition-colors">
+            Project
           </Link>
           <Link href="/certificate" className="hover:text-foreground transition-colors">
             Certificate
@@ -110,11 +110,11 @@ export default function Navbar() {
             }`}
           >
             <Link
-              href="/projects"
+              href="/project"
               onClick={() => setIsMobileMenuOpen(false)}
               className="text-gray-600 hover:text-gray-900 font-medium py-1.5 text-sm border-b border-gray-50 transition-colors"
             >
-              Projects
+              Project
             </Link>
             <Link
               href="/certificate"

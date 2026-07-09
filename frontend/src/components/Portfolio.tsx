@@ -183,9 +183,9 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
           viewport={{ once: true }}
         >
           <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-            (02) RECENT WORK
+            (I) RECENT PROJECT
           </p>
-          <h2 className="font-heading text-4xl md:text-5xl font-bold">My Portfolio.</h2>
+          <h2 className="font-heading text-4xl md:text-5xl font-bold">Projects.</h2>
         </motion.div>
 
         <motion.div
@@ -196,7 +196,7 @@ export default function Portfolio({ isPreview = false }: { isPreview?: boolean }
         >
           {isPreview && (
             <Link
-              href="/projects"
+              href="/project"
               className="inline-block border border-gray-200 px-6 py-2.5 rounded-full text-sm font-medium hover:bg-gray-50 transition-all active:scale-[0.97] cursor-pointer"
             >
               View All Projects ↗
