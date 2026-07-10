@@ -62,7 +62,7 @@ export default function Experience({
         >
           {isPreview && (
             <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-              (III) EXPERIENCE
+              (IV) EXPERIENCE
             </p>
           )}
           <h2 className="font-heading text-4xl md:text-5xl font-bold">

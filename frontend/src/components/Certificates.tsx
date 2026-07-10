@@ -220,7 +220,7 @@ export default function Certificates({ isPreview = false }: { isPreview?: boolea
           viewport={{ once: true }}
         >
           <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-            (IV) CERTIFICATIONS
+            (II) CERTIFICATIONS
           </p>
           <h2 className="font-heading text-4xl md:text-5xl font-bold">Certificates.</h2>
         </motion.div>

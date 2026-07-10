@@ -37,7 +37,7 @@ export default function About({ isPreview = false }: { isPreview?: boolean }) {
       >
         {isPreview && (
           <p className="text-sm text-gray-500 mb-2 uppercase tracking-widest">
-            (II) ABOUT ME
+            (III) ABOUT ME
           </p>
         )}
         <h2 className="font-heading text-4xl md:text-5xl font-bold">
